@@ -1,0 +1,26 @@
+{
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Spring Boot-ModelApplication<model>",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "console": "internalConsole",
+      "mainClass": "ch.unisg.model.ModelApplication",
+      "projectName": "model",
+      "args": "",
+      "envFile": "${workspaceFolder}/.env"
+    },
+    {
+      "type": "java",
+      "name": "Spring Boot-TransactionApplication<transaction>",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "console": "internalConsole",
+      "mainClass": "ch.unisg.transaction.TransactionApplication",
+      "projectName": "transaction",
+      "args": "",
+      "envFile": "${workspaceFolder}/.env"
+    }
+  ]
+}
