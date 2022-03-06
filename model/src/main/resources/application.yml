@@ -6,7 +6,7 @@ spring:
     stream:
       # Define function names which are available to use inside the application
       function:
-        definition: logs;producer
+        definition: logs;producer;transaction
       # Bindings/Mappings for the functions defined above
       bindings:
         # input - <functionName> + -in- + <index>
@@ -15,6 +15,12 @@ spring:
         # input or output binding. It is always 0 for typical single input/output function, so it’s only relevant for
         # Functions with multiple input and output arguments.
         # More: https://docs.spring.io/spring-cloud-stream/docs/current/reference/html/spring-cloud-stream.html#_functional_binding_names
+        transaction-in-0:
+          destination: queue.transaction
+          binder: kafka1
+        transaction-out-0:
+          destination: queue.transaction
+          binder: kafka1
         logs-out-0:
           destination: queue.log
           binder: kafka1
@@ -42,10 +48,10 @@ spring:
                     default:
                       consumer:
                         configuration:
-                          value.deserializer: ch.unisg.dto.converters.MessageDeSerializer
+                          value.deserializer: ch.unisg.model.dto.converters.MessageDeSerializer
                       producer:
                         configuration:
-                          value.serializer: ch.unisg.dto.converters.MessageSerializer
+                          value.serializer: ch.unisg.model.dto.converters.MessageSerializer
       default:
         consumer:
           use-native-decoding: true # This enables using the custom serializer
