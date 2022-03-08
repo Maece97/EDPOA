@@ -40,7 +40,7 @@ public class TransactionTransferObject {
         this.pin = pin;
     }
 
-    public TransactionTransferObject fromHashMap(LinkedHashMap map){
+    public TransactionTransferObject(LinkedHashMap map){
         TransactionTransferObject tto = new TransactionTransferObject();
         tto.setAmount((double)map.get("amount"));
         tto.setCurrency((String) map.get("currency"));
@@ -49,7 +49,6 @@ public class TransactionTransferObject {
         tto.setMerchant((String)map.get("merchant"));
         tto.setTimestamp(new Timestamp((long)map.get("timestamp")));
         tto.setPin((int) map.get("pin"));
-        return tto;
     }
 
 }

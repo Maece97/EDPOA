@@ -24,7 +24,7 @@ public class ModelApplication {
 	public Consumer<Message<?>> transaction(){return this::acceptOrDecline;}
 
 	public void acceptOrDecline (Message<?> message){
-		TransactionTransferObject tto = new TransactionTransferObject().fromHashMap((LinkedHashMap)message.getData());
+		TransactionTransferObject tto = new TransactionTransferObject(((LinkedHashMap)message.getData()));
 		Transaction transaction = new Transaction(tto);
 		transaction.acceptOrDecline();
 
