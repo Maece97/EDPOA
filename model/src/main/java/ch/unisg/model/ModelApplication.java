@@ -1,5 +1,6 @@
 package ch.unisg.model;
 
+import ch.unisg.model.domain.Transaction;
 import ch.unisg.model.dto.Message;
 import ch.unisg.model.dto.TransactionTransferObject;
 import org.springframework.boot.SpringApplication;
@@ -20,10 +21,11 @@ public class ModelApplication {
 	}
 
 	@Bean
-	public Consumer<Message<?>> transaction(){return this::randomChoice;}
+	public Consumer<Message<?>> transaction(){return this::acceptOrDecline;}
 
-	public void randomChoice (Message<?> message){
-		LinkedHashMap transactionData = (LinkedHashMap) message.getData();
-		System.out.println(transactionData);
+	public void acceptOrDecline (Message<?> message){
+		TransactionTransferObject tto = new TransactionTransferObject().fromHashMap((LinkedHashMap)message.getData());
+		Transaction transaction = new Transaction(tto);
+		transaction.acceptOrDecline();
 
 }}

@@ -45,10 +45,11 @@ public class TransactionTransferObject {
         tto.setAmount((double)map.get("amount"));
         tto.setCurrency((String) map.get("currency"));
         tto.setCardNumber((String)map.get("cardNumber"));
-        tto.setId((UUID)map.get("id"));
+        tto.setId(UUID.fromString((String)map.get("id")));
         tto.setMerchant((String)map.get("merchant"));
-        tto.setTimestamp((Timestamp) map.get("timestamp"));
+        tto.setTimestamp(new Timestamp((long)map.get("timestamp")));
         tto.setPin((int) map.get("pin"));
         return tto;
     }
+
 }

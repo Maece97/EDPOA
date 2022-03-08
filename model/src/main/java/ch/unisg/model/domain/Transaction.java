@@ -1,9 +1,11 @@
 package ch.unisg.model.domain;
 
+import ch.unisg.model.dto.TransactionTransferObject;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.sql.Timestamp;
+import java.util.Random;
 import java.util.UUID;
 
 public class Transaction {
@@ -37,5 +39,22 @@ public class Transaction {
         this.currency = currency;
         this.cardNumber = cardNumber;
         this.pin = pin;
+    }
+
+    public Transaction(TransactionTransferObject tto){
+        this.id  =tto.getId();
+        this.timestamp = tto.getTimestamp();
+        this.merchant = tto.getMerchant();
+        this.amount = tto.getAmount();
+        this.currency = tto.getCurrency();
+        this.cardNumber = tto.getCardNumber();
+        this.pin = tto.getPin();
+    }
+
+    public void acceptOrDecline(){
+        String [] options = {"accept", "decline"};
+        int choice = new Random().nextInt(options.length);
+        String currentTransaction  = this.getId().toString();
+        System.out.println(currentTransaction + ":" + options[choice]);
     }
 }
