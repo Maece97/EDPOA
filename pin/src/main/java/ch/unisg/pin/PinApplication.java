@@ -1,13 +1,14 @@
-package ch.unisg.model;
+package ch.unisg.pin;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class ModelApplication {
+public class PinApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(ModelApplication.class, args);
+		System.out.println("Jonas");
+		SpringApplication.run(PinApplication.class, args);
 	}
 
 }

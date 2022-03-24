@@ -1,4 +1,4 @@
-package ch.unisg.model;
+package ch.unisg.pin;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
