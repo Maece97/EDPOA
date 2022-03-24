@@ -24,6 +24,7 @@ public class ModelApplication {
 	public Consumer<Message<?>> transaction(){return this::acceptOrDecline;}
 
 	public void acceptOrDecline (Message<?> message){
+		//Needs to be converted "manually" since the deserializer always returns a HashMap
 		TransactionTransferObject tto = new TransactionTransferObject(((LinkedHashMap)message.getData()));
 		Transaction transaction = new Transaction(tto);
 		transaction.acceptOrDecline();
