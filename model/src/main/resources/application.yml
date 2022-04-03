@@ -1,6 +1,9 @@
 server:
   port: 8101
 
+kafka:
+  bootstrapAddress: localhost:29092
+
 spring:
   cloud:
     stream:
