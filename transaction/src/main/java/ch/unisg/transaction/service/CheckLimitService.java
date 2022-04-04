@@ -35,6 +35,9 @@ public class CheckLimitService {
             this.cardLimits.put(cardNumber,newLimit);
             System.out.println("Updated limit for card "+ cardNumber+ " to be "+String.valueOf(newLimit));
         }
+        else{
+            System.out.println("Sorry, limit could not be updated since card does not exist");
+        }
     }
 
 

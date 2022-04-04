@@ -43,6 +43,7 @@ public class MessageProcessConsumer {
 
     @KafkaListener(topics = "update-limit")
     public void updateLimit(LimitUpdateDto limitUpdateDto){
+        //Working fine
         System.out.println("Updating limit via Kafka");
         CheckLimitService checkLimitService = CheckLimitService.getInstance();
         checkLimitService.updateLimit(limitUpdateDto.getCardNumber(), limitUpdateDto.getLimit());
