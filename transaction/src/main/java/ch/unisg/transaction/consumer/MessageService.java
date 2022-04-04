@@ -1,5 +1,6 @@
 package ch.unisg.transaction.consumer;
 
+import ch.unisg.transaction.dto.PinCheckDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -39,6 +40,33 @@ public class MessageService {
 
             log.info("Correlation successful. Process Instance Id: {}", messageResultJson);
             log.info("Correlation key used: {}", camundaMessageDto.getCorrelationId());
+
+            return messageResult;
+        } catch (MismatchingMessageCorrelationException e) {
+            log.error("Issue when correlating the message: {}", e.getMessage());
+        } catch (Exception e) {
+            log.error("Unknown issue occurred", e);
+        }
+        return null;
+    }
+
+    public MessageCorrelationResult correlateMessagePin(PinCheckDto pinCheckDto, String messageName) {
+        try {
+            log.info("Consuming message {}", messageName);
+
+            MessageCorrelationBuilder messageCorrelationBuilder = runtimeService.createMessageCorrelation(messageName);
+
+
+            messageCorrelationBuilder.setVariable("pin",pinCheckDto.getPin());
+            messageCorrelationBuilder.setVariable("cardNumber",pinCheckDto.getCardNumber());
+
+            MessageCorrelationResult messageResult = messageCorrelationBuilder.processInstanceBusinessKey(pinCheckDto.getCorrelationId())
+                    .correlateWithResult();
+
+            String messageResultJson = new ObjectMapper().writeValueAsString(MessageCorrelationResultDto.fromMessageCorrelationResult(messageResult));
+
+            log.info("Correlation successful. Process Instance Id: {}", messageResultJson);
+            log.info("Correlation key used: {}", pinCheckDto.getCorrelationId());
 
             return messageResult;
         } catch (MismatchingMessageCorrelationException e) {

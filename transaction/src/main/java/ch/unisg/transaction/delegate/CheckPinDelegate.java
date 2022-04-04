@@ -12,14 +12,14 @@ import org.springframework.stereotype.Service;
 @Service("CheckPin")
 @RequiredArgsConstructor
 public class CheckPinDelegate implements JavaDelegate {
-    private final KafkaTemplate<String, CamundaMessageDto> kafkaTemplate;
+    private final KafkaTemplate<String, PinCheckDto> kafkaTemplate;
 
     @Override
     public void execute(DelegateExecution delegateExecution) throws Exception {
         System.out.println("I am checking the pin here");
         String pin = (String)delegateExecution.getVariable("pin");
         String cardNumber = (String) delegateExecution.getVariable("cardNumber");
-        kafkaTemplate.send("check-pin",new CamundaMessageDto("MessageIntermediate",new PinCheckDto(cardNumber,pin)));
+        kafkaTemplate.send("check-pin",new PinCheckDto("1",cardNumber,pin));
 
         if(pin.equals("123")){
             delegateExecution.setVariable("pinCorrect", (boolean)true);

@@ -1,5 +1,6 @@
 package ch.unisg.transaction.config;
 
+import ch.unisg.transaction.dto.PinCheckDto;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 import ch.unisg.transaction.dto.CamundaMessageDto;
@@ -43,5 +44,26 @@ public class KafkaProducerConfig {
     @Bean
     public KafkaTemplate<String, CamundaMessageDto> kafkaTemplate() {
         return new KafkaTemplate<>(producerFactory());
+    }
+
+    @Bean
+    public ProducerFactory<String, PinCheckDto> pinFactory() {
+        Map<String, Object> props = new HashMap<>();
+        props.put(
+                ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,
+                bootstrapAddress);
+        props.put(
+                ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG,
+                StringSerializer.class);
+        props.put(
+                ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,
+                JsonSerializer.class);
+        props.put(JsonDeserializer.TRUSTED_PACKAGES, trustedPackage);
+        return new DefaultKafkaProducerFactory<>(props);
+    }
+
+    @Bean
+    public KafkaTemplate<String, PinCheckDto> stringKafkaTemplate() {
+        return new KafkaTemplate<>(pinFactory());
     }
 }

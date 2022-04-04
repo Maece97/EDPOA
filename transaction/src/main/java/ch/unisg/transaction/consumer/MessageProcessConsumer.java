@@ -1,6 +1,7 @@
 package ch.unisg.transaction.consumer;
 
 import ch.unisg.transaction.dto.MessageProcessDto;
+import ch.unisg.transaction.dto.PinCheckDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import ch.unisg.transaction.dto.CamundaMessageDto;
@@ -28,11 +29,13 @@ public class MessageProcessConsumer {
        messageService.correlateMessage(camundaMessageDto, MESSAGE_INTERMEDIATE);
     }
 
-    @KafkaListener(topics = "example-topic")
-    public void checkPin(CamundaMessageDto camundaMessageDto){
+
+
+    @KafkaListener(topics = "check-pin")
+    public void checkPin(PinCheckDto pinCheckDto){
         System.out.println("I got something at the receiver side");
-        //MessageProcessDto msg = camundaMessageDto.getDto();
-        //System.out.println(msg.getAmount());
-        messageService.correlateMessage(camundaMessageDto, MESSAGE_INTERMEDIATE);
+        System.out.println(pinCheckDto.getPin());
+        //Cool till here everything works...but how the fuck configure this correlation shit??!
+        messageService.correlateMessagePin(pinCheckDto, "PinMessage");
     }
 }

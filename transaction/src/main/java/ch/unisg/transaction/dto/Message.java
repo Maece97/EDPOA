@@ -1,5 +1,6 @@
 package ch.unisg.transaction.dto;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,10 +12,8 @@ import java.io.Serializable;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class PinCheckDto implements Serializable {
-
+public class Message <T> implements Serializable {
     private String correlationId;
-    private String cardNumber;
-    private String pin;
+    private T payload;
 
 }
