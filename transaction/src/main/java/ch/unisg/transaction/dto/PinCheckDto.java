@@ -11,9 +11,9 @@ import java.io.Serializable;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CamundaMessageDto implements Serializable {
+public class PinCheckDto implements Serializable {
 
-    private String correlationId;
-    private PinCheckDto dto;
+    private String cardNumber;
+    private String pin;
 
 }

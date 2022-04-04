@@ -37,4 +37,9 @@ public class KafkaTopicConfig {
     public NewTopic serviceTaskMessageTopic() {
         return new NewTopic("service-task-message-topic", 1, (short) 1);
     }
+
+    @Bean
+    public NewTopic exampleTopic(){return new NewTopic("example-topic",1,(short) 1);};
+    @Bean
+    public NewTopic checkPinTopic(){return new NewTopic("check-pin",1,(short) 1);};
 }

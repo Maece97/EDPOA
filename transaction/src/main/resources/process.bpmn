@@ -111,7 +111,7 @@
       <bpmn:intermediateCatchEvent id="Event_1ir7gri" name="Pin Result received">
         <bpmn:incoming>Flow_1lu5tft</bpmn:incoming>
         <bpmn:outgoing>Flow_0hff9v3</bpmn:outgoing>
-        <bpmn:messageEventDefinition id="MessageEventDefinition_1hp7la9" messageRef="Message_0ujofrw" />
+        <bpmn:messageEventDefinition id="MessageEventDefinition_1hp7la9" messageRef="Message_144wiqd" />
       </bpmn:intermediateCatchEvent>
       <bpmn:sequenceFlow id="Flow_0hff9v3" sourceRef="Event_1ir7gri" targetRef="Gateway_1w3id7w" />
     </bpmn:subProcess>
@@ -159,6 +159,7 @@
   <bpmn:error id="Error_0d1ut31" name="invalidTransaction" errorCode="invalidTransaction" />
   <bpmn:error id="Error_03hguz2" name="invalidTransaction" errorCode="invalidTransaction" />
   <bpmn:message id="Message_0ujofrw" name="PinMessage" />
+  <bpmn:message id="Message_144wiqd" name="MessageIntermediate" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="edpo-process">
       <bpmndi:BPMNEdge id="Flow_0d072c1_di" bpmnElement="Flow_0d072c1">
@@ -200,6 +201,14 @@
       <bpmndi:BPMNShape id="Activity_11vewd7_di" bpmnElement="Activity_11vewd7" isExpanded="true">
         <dc:Bounds x="280" y="150" width="1190" height="710" />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_0hff9v3_di" bpmnElement="Flow_0hff9v3">
+        <di:waypoint x="678" y="280" />
+        <di:waypoint x="765" y="280" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1lu5tft_di" bpmnElement="Flow_1lu5tft">
+        <di:waypoint x="570" y="280" />
+        <di:waypoint x="642" y="280" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_11tnnsi_di" bpmnElement="Flow_11tnnsi">
         <di:waypoint x="900" y="735" />
         <di:waypoint x="900" y="772" />
@@ -294,14 +303,6 @@
           <dc:Bounds x="513" y="500" width="54" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1lu5tft_di" bpmnElement="Flow_1lu5tft">
-        <di:waypoint x="570" y="280" />
-        <di:waypoint x="642" y="280" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0hff9v3_di" bpmnElement="Flow_0hff9v3">
-        <di:waypoint x="678" y="280" />
-        <di:waypoint x="765" y="280" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="Event_0anu9d7_di" bpmnElement="Event_0anu9d7">
         <dc:Bounds x="312" y="392" width="36" height="36" />
         <bpmndi:BPMNLabel>
@@ -341,6 +342,9 @@
       <bpmndi:BPMNShape id="Gateway_04a3dto_di" bpmnElement="Gateway_1yr9uys">
         <dc:Bounds x="405" y="385" width="50" height="50" />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_17o24mu_di" bpmnElement="Activity_0623zj2">
+        <dc:Bounds x="470" y="240" width="100" height="80" />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_1w3id7w_di" bpmnElement="Gateway_1w3id7w" isMarkerVisible="true">
         <dc:Bounds x="765" y="255" width="50" height="50" />
         <bpmndi:BPMNLabel>
@@ -370,9 +374,6 @@
         <bpmndi:BPMNLabel>
           <dc:Bounds x="863" y="815" width="76" height="27" />
         </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_17o24mu_di" bpmnElement="Activity_0623zj2">
-        <dc:Bounds x="470" y="240" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_0nefka0_di" bpmnElement="Event_1ir7gri">
         <dc:Bounds x="642" y="262" width="36" height="36" />
