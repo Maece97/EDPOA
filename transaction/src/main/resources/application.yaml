@@ -3,3 +3,8 @@ spring.datasource.url: jdbc:h2:file:./camunda-h2-database
 camunda.bpm.admin-user:
   id: demo
   password: demo
+
+kafka:
+  bootstrap-address: localhost:29092
+  group-id: randomGroupId
+  trusted-packages: ch.unisg.transaction.dto

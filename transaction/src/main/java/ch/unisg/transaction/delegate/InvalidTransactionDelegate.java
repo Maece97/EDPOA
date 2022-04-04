@@ -1,4 +1,4 @@
-package ch.unisg.transaction;
+package ch.unisg.transaction.delegate;
 
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
