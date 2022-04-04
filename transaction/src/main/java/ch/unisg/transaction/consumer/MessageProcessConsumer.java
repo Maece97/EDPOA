@@ -1,7 +1,9 @@
 package ch.unisg.transaction.consumer;
 
+import ch.unisg.transaction.dto.LimitUpdateDto;
 import ch.unisg.transaction.dto.MessageProcessDto;
 import ch.unisg.transaction.dto.PinCheckDto;
+import ch.unisg.transaction.service.CheckLimitService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import ch.unisg.transaction.dto.CamundaMessageDto;
@@ -37,5 +39,12 @@ public class MessageProcessConsumer {
         System.out.println(pinCheckDto.getPin());
         //Cool till here everything works...but how the fuck configure this correlation shit??!
         messageService.correlateMessagePin(pinCheckDto, "PinMessage");
+    }
+
+    @KafkaListener(topics = "update-limit")
+    public void updateLimit(LimitUpdateDto limitUpdateDto){
+        System.out.println("Updating limit via Kafka");
+        CheckLimitService checkLimitService = CheckLimitService.getInstance();
+        checkLimitService.updateLimit(limitUpdateDto.getCardNumber(), limitUpdateDto.getLimit());
     }
 }

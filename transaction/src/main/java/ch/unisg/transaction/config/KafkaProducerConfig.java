@@ -1,5 +1,6 @@
 package ch.unisg.transaction.config;
 
+import ch.unisg.transaction.dto.LimitUpdateDto;
 import ch.unisg.transaction.dto.PinCheckDto;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
@@ -14,6 +15,7 @@ import org.springframework.kafka.support.serializer.JsonDeserializer;
 import org.springframework.kafka.support.serializer.JsonSerializer;
 
 import java.util.HashMap;
+import java.util.ListIterator;
 import java.util.Map;
 
 @Configuration
@@ -66,4 +68,28 @@ public class KafkaProducerConfig {
     public KafkaTemplate<String, PinCheckDto> stringKafkaTemplate() {
         return new KafkaTemplate<>(pinFactory());
     }
+
+
+    @Bean
+    public ProducerFactory<String, LimitUpdateDto> limitFactory() {
+        Map<String, Object> props = new HashMap<>();
+        props.put(
+                ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,
+                bootstrapAddress);
+        props.put(
+                ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG,
+                StringSerializer.class);
+        props.put(
+                ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,
+                JsonSerializer.class);
+        props.put(JsonDeserializer.TRUSTED_PACKAGES, trustedPackage);
+        return new DefaultKafkaProducerFactory<>(props);
+    }
+
+    @Bean
+    public KafkaTemplate<String, LimitUpdateDto> limitTemplate() {
+        return new KafkaTemplate<>(limitFactory());
+    }
+
+
 }

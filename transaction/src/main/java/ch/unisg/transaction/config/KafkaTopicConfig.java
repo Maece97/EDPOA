@@ -42,4 +42,6 @@ public class KafkaTopicConfig {
     public NewTopic exampleTopic(){return new NewTopic("example-topic",1,(short) 1);};
     @Bean
     public NewTopic checkPinTopic(){return new NewTopic("check-pin",1,(short) 1);};
+    @Bean
+    public NewTopic updateLimitTopic(){return new NewTopic("update-limit",1,(short) 1);};
 }

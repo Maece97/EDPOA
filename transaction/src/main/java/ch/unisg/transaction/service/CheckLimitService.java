@@ -18,14 +18,24 @@ public class CheckLimitService {
         }
         return INSTANCE;
     }
-
+    //Methods
     public HashMap<String,Integer> getLimits(){
         return this.cardLimits;
     }
+
     public boolean limitExceeded(String cardNumber, int amount){
         if(this.cardLimits.containsKey(cardNumber)){
             return this.cardLimits.get(cardNumber)<=amount;
         }
         else return true;
     }
+
+    public void updateLimit(String cardNumber, int newLimit){
+        if(this.cardLimits.containsKey(cardNumber)){
+            this.cardLimits.put(cardNumber,newLimit);
+            System.out.println("Updated limit for card "+ cardNumber+ " to be "+String.valueOf(newLimit));
+        }
+    }
+
+
 }

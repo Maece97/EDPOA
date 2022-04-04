@@ -19,7 +19,7 @@ public class CheckPinDelegate implements JavaDelegate {
         System.out.println("I am checking the pin here");
         String pin = (String)delegateExecution.getVariable("pin");
         String cardNumber = (String) delegateExecution.getVariable("cardNumber");
-        kafkaTemplate.send("check-pin",new PinCheckDto("1",cardNumber,pin));
+        //kafkaTemplate.send("check-pin",new PinCheckDto("1",cardNumber,pin));
 
         if(pin.equals("123")){
             delegateExecution.setVariable("pinCorrect", (boolean)true);

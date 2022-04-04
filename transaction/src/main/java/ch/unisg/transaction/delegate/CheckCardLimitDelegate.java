@@ -2,6 +2,7 @@ package ch.unisg.transaction.delegate;
 
 
 import ch.unisg.transaction.dto.CamundaMessageDto;
+import ch.unisg.transaction.dto.LimitUpdateDto;
 import ch.unisg.transaction.dto.MessageProcessDto;
 import ch.unisg.transaction.service.CheckLimitService;
 import lombok.RequiredArgsConstructor;
@@ -16,10 +17,13 @@ import javax.sound.midi.Soundbank;
 @Service("CheckCardLimit")
 @RequiredArgsConstructor
 public class CheckCardLimitDelegate implements JavaDelegate {
-    private final KafkaTemplate<String, CamundaMessageDto> kafkaTemplate;
+    private final KafkaTemplate<String, LimitUpdateDto> kafkaTemplate;
 
     @Override
     public void execute(DelegateExecution delegateExecution) throws Exception {
+        // test update via Kafka
+        System.out.println("Sending something here via Kafka");
+        kafkaTemplate.send("update-limit",new LimitUpdateDto("123456",9899));
         //Get cardNumber and amount
         int amount = Integer.valueOf((String)delegateExecution.getVariable("amount"));
         String cardNumber = (String) delegateExecution.getVariable("cardNumber");
