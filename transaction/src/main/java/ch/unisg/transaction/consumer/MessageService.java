@@ -59,9 +59,12 @@ public class MessageService {
 
             messageCorrelationBuilder.setVariable("pin",pinCheckDto.getPin());
             messageCorrelationBuilder.setVariable("cardNumber",pinCheckDto.getCardNumber());
+            messageCorrelationBuilder.setVariable("pinCorrect",(boolean)true);
 
-            MessageCorrelationResult messageResult = messageCorrelationBuilder.processInstanceBusinessKey("1")
+            System.out.println("Correlating here in progress");
+            MessageCorrelationResult messageResult = messageCorrelationBuilder.processInstanceBusinessKey(pinCheckDto.getCorrelationId())
                     .correlateWithResult();
+            System.out.println("Correlated");
 
             String messageResultJson = new ObjectMapper().writeValueAsString(MessageCorrelationResultDto.fromMessageCorrelationResult(messageResult));
 

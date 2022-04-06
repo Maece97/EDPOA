@@ -38,7 +38,7 @@ public class MessageProcessConsumer {
         System.out.println("I got something at the receiver side");
         System.out.println(pinCheckDto.getPin());
         //Cool till here everything works...but how the fuck configure this correlation shit??!
-        messageService.correlateMessagePin(pinCheckDto, "PinMessage");
+        messageService.correlateMessagePin(pinCheckDto, "PinCheckedResult");
     }
 
     @KafkaListener(topics = "update-limit")

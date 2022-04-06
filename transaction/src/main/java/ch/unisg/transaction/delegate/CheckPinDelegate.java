@@ -21,13 +21,13 @@ public class CheckPinDelegate implements JavaDelegate {
         String cardNumber = (String) delegateExecution.getVariable("cardNumber");
         //kafkaTemplate.send("check-pin",new PinCheckDto("1",cardNumber,pin));
 
-        if(pin.equals("123")){
+        /**if(pin.equals("123")){
             delegateExecution.setVariable("pinCorrect", (boolean)true);
             System.out.println("pin was correct");
         }else{
             delegateExecution.setVariable("pinCorrect",(boolean)false);
             System.out.println("pin was incorrect");
-        }
+        }**/
 
     }
 }
