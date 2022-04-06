@@ -37,7 +37,6 @@ public class MessageProcessConsumer {
     public void checkPin(PinCheckDto pinCheckDto){
         System.out.println("I got something at the receiver side");
         System.out.println(pinCheckDto.getPin());
-        //Cool till here everything works...but how the fuck configure this correlation shit??!
         messageService.correlateMessagePin(pinCheckDto, "PinCheckedResult");
     }
 
