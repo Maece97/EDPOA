@@ -1,5 +1,6 @@
 package ch.unisg.transaction.delegate;
 
+import camundajar.impl.scala.concurrent.impl.FutureConvertersImpl;
 import ch.unisg.transaction.dto.CamundaMessageDto;
 import ch.unisg.transaction.dto.MessageProcessDto;
 import ch.unisg.transaction.dto.PinCheckDto;
@@ -16,18 +17,19 @@ public class CheckPinDelegate implements JavaDelegate {
 
     @Override
     public void execute(DelegateExecution delegateExecution) throws Exception {
-
+        //Get all values from the process
         String pin = (String)delegateExecution.getVariable("pin");
         String cardNumber = (String) delegateExecution.getVariable("cardNumber");
-        //kafkaTemplate.send("check-pin",new PinCheckDto("1",cardNumber,pin));
+        String correlationId = (String) delegateExecution.getBusinessKey();
+        //Just set some default value here --> avoids creating a separate DTO
+        boolean pinCorrect = false;
 
-        /**if(pin.equals("123")){
-            delegateExecution.setVariable("pinCorrect", (boolean)true);
-            System.out.println("pin was correct");
-        }else{
-            delegateExecution.setVariable("pinCorrect",(boolean)false);
-            System.out.println("pin was incorrect");
-        }**/
+        //Construct a new DTO to publish via Kafka
+        PinCheckDto pinCheckDto = new PinCheckDto(correlationId,cardNumber,pin,pinCorrect);
+
+        //Send via Kafka
+        kafkaTemplate.send("check-pin", pinCheckDto);
+
 
     }
 }

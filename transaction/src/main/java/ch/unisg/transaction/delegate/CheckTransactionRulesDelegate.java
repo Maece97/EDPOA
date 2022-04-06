@@ -25,7 +25,7 @@ public class CheckTransactionRulesDelegate implements JavaDelegate {
         }
 
         //Thread.sleep(5000);
-        kafkaTemplate.send("check-pin",new PinCheckDto("20","1234","1234"));
+        //kafkaTemplate.send("check-pin",new PinCheckDto("20","1234","1234"));
 
     }
 }

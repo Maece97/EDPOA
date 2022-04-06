@@ -16,5 +16,6 @@ public class PinCheckDto implements Serializable {
     private String correlationId;
     private String cardNumber;
     private String pin;
+    private boolean pinCorrect;
 
 }
