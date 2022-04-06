@@ -87,7 +87,7 @@
         <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${!limitExceeded}</bpmn:conditionExpression>
       </bpmn:sequenceFlow>
       <bpmn:sequenceFlow id="Flow_1ns56u2" sourceRef="Gateway_1yr9uys" targetRef="Activity_0su1ihe" />
-      <bpmn:serviceTask id="Activity_0su1ihe" name="Trigger Check Blocking Rules" camunda:delegateExpression="#{CheckTransactionRules}">
+      <bpmn:serviceTask id="Activity_0su1ihe" name="Trigger Check Blocking Rules" camunda:delegateExpression="#{CheckBlockingRules}">
         <bpmn:incoming>Flow_1ns56u2</bpmn:incoming>
         <bpmn:outgoing>Flow_0ivb6vj</bpmn:outgoing>
       </bpmn:serviceTask>

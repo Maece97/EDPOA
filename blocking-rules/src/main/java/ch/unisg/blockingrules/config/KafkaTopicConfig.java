@@ -1,4 +1,4 @@
-package ch.unisg.transaction.config;
+package ch.unisg.blockingrules.config;
 
 import org.apache.kafka.clients.admin.AdminClientConfig;
 import org.apache.kafka.clients.admin.NewTopic;
@@ -40,19 +40,16 @@ public class KafkaTopicConfig {
 
     @Bean
     public NewTopic exampleTopic(){return new NewTopic("example-topic",1,(short) 1);};
-
-    //This is stuff for checking the pin
     @Bean
     public NewTopic checkPinTopic(){return new NewTopic("check-pin",1,(short) 1);};
     @Bean
+    public NewTopic updateLimitTopic(){return new NewTopic("update-limit",1,(short) 1);};
+    @Bean
     public NewTopic checkPinResultTopic(){return new NewTopic("check-pin-result",1,(short) 1);};
-     // This is stuff for cheking the blocking rule
-     @Bean
-     public NewTopic checkBlockingTopic(){return new NewTopic("check-blocking",1,(short) 1);};
+
+    // This is stuff for cheking the blocking rule
+    @Bean
+    public NewTopic checkBlockingTopic(){return new NewTopic("check-blocking",1,(short) 1);};
     @Bean
     public NewTopic checkBlockingResultTopic(){return new NewTopic("check-blocking-result",1,(short) 1);};
-
-
-    @Bean
-    public NewTopic updateLimitTopic(){return new NewTopic("update-limit",1,(short) 1);};
 }
