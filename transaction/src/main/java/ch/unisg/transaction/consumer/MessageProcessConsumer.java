@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import ch.unisg.transaction.dto.CamundaMessageDto;
 import org.camunda.bpm.engine.RuntimeService;
 import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -32,11 +33,10 @@ public class MessageProcessConsumer {
     }
 
 
-
-    @KafkaListener(topics = "check-pin")
-    public void checkPin(PinCheckDto pinCheckDto){
+    //Get the results from checking the pin
+    @KafkaListener(topics = "check-pin-result")
+    public void checkPin(@Payload PinCheckDto pinCheckDto){
         System.out.println("I got something at the receiver side");
-        System.out.println(pinCheckDto.getPin());
         messageService.correlateMessagePin(pinCheckDto, "PinCheckedResult");
     }
 

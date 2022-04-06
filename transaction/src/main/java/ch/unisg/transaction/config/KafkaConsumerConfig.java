@@ -1,6 +1,7 @@
 package ch.unisg.transaction.config;
 
 import ch.unisg.transaction.dto.CamundaMessageDto;
+import ch.unisg.transaction.dto.PinCheckDto;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import ch.unisg.transaction.dto.CamundaMessageDto;
@@ -30,7 +31,7 @@ public class KafkaConsumerConfig {
     private String trustedPackage;
 
     @Bean
-    public ConsumerFactory<String, CamundaMessageDto> consumerFactory() {
+    public ConsumerFactory<String, PinCheckDto> consumerFactory() {
         Map<String, Object> props = new HashMap<>();
         props.put(
                 ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG,
@@ -38,21 +39,15 @@ public class KafkaConsumerConfig {
         props.put(
                 ConsumerConfig.GROUP_ID_CONFIG,
                 groupId);
-        props.put(
-                ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG,
-                StringDeserializer.class);
-        props.put(
-                ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG,
-                JsonDeserializer.class);
         props.put(JsonDeserializer.TRUSTED_PACKAGES, trustedPackage);
-        return new DefaultKafkaConsumerFactory<>(props);
+        return new DefaultKafkaConsumerFactory<>(props,new StringDeserializer(),new JsonDeserializer<>(PinCheckDto.class, false));
     }
 
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, CamundaMessageDto>
+    public ConcurrentKafkaListenerContainerFactory<String, PinCheckDto>
     kafkaListenerContainerFactory() {
 
-        ConcurrentKafkaListenerContainerFactory<String, CamundaMessageDto> factory =
+        ConcurrentKafkaListenerContainerFactory<String, PinCheckDto> factory =
                 new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerFactory());
         return factory;

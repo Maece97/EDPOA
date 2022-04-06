@@ -59,9 +59,10 @@ public class MessageService {
 
             messageCorrelationBuilder.setVariable("pin",pinCheckDto.getPin());
             messageCorrelationBuilder.setVariable("cardNumber",pinCheckDto.getCardNumber());
-            messageCorrelationBuilder.setVariable("pinCorrect",(boolean)true);
+            messageCorrelationBuilder.setVariable("pinCorrect",(boolean)pinCheckDto.isPinCorrect());
 
             System.out.println("Correlating here in progress");
+            System.out.println(pinCheckDto.getCorrelationId());
             MessageCorrelationResult messageResult = messageCorrelationBuilder.processInstanceBusinessKey(pinCheckDto.getCorrelationId())
                     .correlateWithResult();
             System.out.println("Correlated");

@@ -7,4 +7,4 @@ camunda.bpm.admin-user:
 kafka:
   bootstrap-address: localhost:29092
   group-id: randomGroupId
-  trusted-packages: ch.unisg.transaction.dto
+  trusted-packages: ch.unisg.transaction.dto, ch.unisg.pin.dto
