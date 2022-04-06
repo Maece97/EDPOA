@@ -16,7 +16,7 @@ public class CheckPinDelegate implements JavaDelegate {
 
     @Override
     public void execute(DelegateExecution delegateExecution) throws Exception {
-        System.out.println("I am checking the pin here");
+
         String pin = (String)delegateExecution.getVariable("pin");
         String cardNumber = (String) delegateExecution.getVariable("cardNumber");
         //kafkaTemplate.send("check-pin",new PinCheckDto("1",cardNumber,pin));

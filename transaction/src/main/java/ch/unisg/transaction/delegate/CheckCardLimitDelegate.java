@@ -22,8 +22,8 @@ public class CheckCardLimitDelegate implements JavaDelegate {
     @Override
     public void execute(DelegateExecution delegateExecution) throws Exception {
         // test update via Kafka
-        System.out.println("Sending something here via Kafka");
-        kafkaTemplate.send("update-limit",new LimitUpdateDto("123456",9899));
+        //System.out.println("Sending something here via Kafka");
+        //kafkaTemplate.send("update-limit",new LimitUpdateDto("123456",9899));
         //Get cardNumber and amount
         int amount = Integer.valueOf((String)delegateExecution.getVariable("amount"));
         String cardNumber = (String) delegateExecution.getVariable("cardNumber");

@@ -65,7 +65,7 @@
         <bpmn:outgoing>Flow_1lu5tft</bpmn:outgoing>
       </bpmn:serviceTask>
       <bpmn:exclusiveGateway id="Gateway_1w3id7w" name="Limit exceeded? ">
-        <bpmn:incoming>Flow_0hff9v3</bpmn:incoming>
+        <bpmn:incoming>Flow_1lu5tft</bpmn:incoming>
         <bpmn:outgoing>Flow_1irz50n</bpmn:outgoing>
         <bpmn:outgoing>Flow_1yrgfil</bpmn:outgoing>
       </bpmn:exclusiveGateway>
@@ -107,13 +107,7 @@
         <bpmn:incoming>Flow_11tnnsi</bpmn:incoming>
         <bpmn:errorEventDefinition id="ErrorEventDefinition_1f0ab5o" errorRef="Error_03hguz2" />
       </bpmn:endEvent>
-      <bpmn:sequenceFlow id="Flow_1lu5tft" sourceRef="Activity_0623zj2" targetRef="Event_1ir7gri" />
-      <bpmn:intermediateCatchEvent id="Event_1ir7gri" name="Pin Result received">
-        <bpmn:incoming>Flow_1lu5tft</bpmn:incoming>
-        <bpmn:outgoing>Flow_0hff9v3</bpmn:outgoing>
-        <bpmn:messageEventDefinition id="MessageEventDefinition_1hp7la9" messageRef="Message_144wiqd" />
-      </bpmn:intermediateCatchEvent>
-      <bpmn:sequenceFlow id="Flow_0hff9v3" sourceRef="Event_1ir7gri" targetRef="Gateway_1w3id7w" />
+      <bpmn:sequenceFlow id="Flow_1lu5tft" sourceRef="Activity_0623zj2" targetRef="Gateway_1w3id7w" />
     </bpmn:subProcess>
     <bpmn:endEvent id="Event_1en6mn0" name="Forwarded Transaction">
       <bpmn:incoming>Flow_0s297hs</bpmn:incoming>
@@ -138,6 +132,14 @@
       <bpmn:incoming>Flow_00t4pfd</bpmn:incoming>
       <bpmn:outgoing>Flow_0s297hs</bpmn:outgoing>
     </bpmn:sendTask>
+    <bpmn:endEvent id="Event_17kafwb" name="Process timed out">
+      <bpmn:incoming>Flow_0d072c1</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:serviceTask id="Activity_0vq3f0i" name="Reject Transaction" camunda:delegateExpression="#{InvalidTransaction}">
+      <bpmn:incoming>Flow_1rc6axe</bpmn:incoming>
+      <bpmn:outgoing>Flow_0d072c1</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_0d072c1" sourceRef="Activity_0vq3f0i" targetRef="Event_17kafwb" />
     <bpmn:boundaryEvent id="Event_1s78fem" name="Overall Timeout" attachedToRef="Activity_11vewd7">
       <bpmn:outgoing>Flow_1rc6axe</bpmn:outgoing>
       <bpmn:timerEventDefinition id="TimerEventDefinition_0ozoooz">
@@ -145,14 +147,6 @@
       </bpmn:timerEventDefinition>
     </bpmn:boundaryEvent>
     <bpmn:sequenceFlow id="Flow_1rc6axe" sourceRef="Event_1s78fem" targetRef="Activity_0vq3f0i" />
-    <bpmn:endEvent id="Event_17kafwb" name="Process timed out">
-      <bpmn:incoming>Flow_0d072c1</bpmn:incoming>
-    </bpmn:endEvent>
-    <bpmn:sequenceFlow id="Flow_0d072c1" sourceRef="Activity_0vq3f0i" targetRef="Event_17kafwb" />
-    <bpmn:serviceTask id="Activity_0vq3f0i" name="Reject Transaction" camunda:delegateExpression="#{InvalidTransaction}">
-      <bpmn:incoming>Flow_1rc6axe</bpmn:incoming>
-      <bpmn:outgoing>Flow_0d072c1</bpmn:outgoing>
-    </bpmn:serviceTask>
   </bpmn:process>
   <bpmn:message id="Message_12ksifn" name="Transaction" />
   <bpmn:error id="Error_15g3nim" name="invalidTransaction" errorCode="invalidTransaction" />
@@ -201,13 +195,9 @@
       <bpmndi:BPMNShape id="Activity_11vewd7_di" bpmnElement="Activity_11vewd7" isExpanded="true">
         <dc:Bounds x="280" y="150" width="1190" height="710" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="Flow_0hff9v3_di" bpmnElement="Flow_0hff9v3">
-        <di:waypoint x="678" y="280" />
-        <di:waypoint x="765" y="280" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1lu5tft_di" bpmnElement="Flow_1lu5tft">
         <di:waypoint x="570" y="280" />
-        <di:waypoint x="642" y="280" />
+        <di:waypoint x="765" y="280" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_11tnnsi_di" bpmnElement="Flow_11tnnsi">
         <di:waypoint x="900" y="735" />
@@ -373,12 +363,6 @@
         <dc:Bounds x="882" y="772" width="36" height="36" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="863" y="815" width="76" height="27" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_0nefka0_di" bpmnElement="Event_1ir7gri">
-        <dc:Bounds x="642" y="262" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="636" y="305" width="51" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1en6mn0_di" bpmnElement="Event_1en6mn0">

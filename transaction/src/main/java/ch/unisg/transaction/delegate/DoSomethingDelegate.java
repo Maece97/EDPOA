@@ -11,6 +11,7 @@ public class DoSomethingDelegate implements JavaDelegate {
     public void execute(DelegateExecution delegateExecution) throws Exception {
         System.out.println("I am in the delegate");
         System.out.println(delegateExecution.getVariable("amount"));
+        System.out.println("Hit the timeout");
 
     }
 }

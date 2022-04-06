@@ -60,7 +60,7 @@ public class MessageService {
             messageCorrelationBuilder.setVariable("pin",pinCheckDto.getPin());
             messageCorrelationBuilder.setVariable("cardNumber",pinCheckDto.getCardNumber());
 
-            MessageCorrelationResult messageResult = messageCorrelationBuilder.processInstanceBusinessKey(pinCheckDto.getCorrelationId())
+            MessageCorrelationResult messageResult = messageCorrelationBuilder.processInstanceBusinessKey("1")
                     .correlateWithResult();
 
             String messageResultJson = new ObjectMapper().writeValueAsString(MessageCorrelationResultDto.fromMessageCorrelationResult(messageResult));
