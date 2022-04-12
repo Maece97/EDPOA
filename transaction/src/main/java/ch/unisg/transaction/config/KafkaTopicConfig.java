@@ -55,4 +55,7 @@ public class KafkaTopicConfig {
 
     @Bean
     public NewTopic updateLimitTopic(){return new NewTopic("update-limit",1,(short) 1);};
+
+    @Bean
+    public NewTopic sendTransactionTopic(){return new NewTopic("approved-transactions",1,(short) 1);};
 }

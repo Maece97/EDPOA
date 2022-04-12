@@ -1,11 +1,8 @@
 package ch.unisg.transaction.config;
 
-import ch.unisg.transaction.dto.BlockingCheckDto;
-import ch.unisg.transaction.dto.LimitUpdateDto;
-import ch.unisg.transaction.dto.PinCheckDto;
+import ch.unisg.transaction.dto.*;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
-import ch.unisg.transaction.dto.CamundaMessageDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -114,6 +111,27 @@ public class KafkaProducerConfig {
     @Bean
     public KafkaTemplate<String, LimitUpdateDto> limitTemplate() {
         return new KafkaTemplate<>(limitFactory());
+    }
+
+    @Bean
+    public ProducerFactory<String, TransactionDto> transactionFactory() {
+        Map<String, Object> props = new HashMap<>();
+        props.put(
+                ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,
+                bootstrapAddress);
+        props.put(
+                ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG,
+                StringSerializer.class);
+        props.put(
+                ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,
+                JsonSerializer.class);
+        props.put(JsonDeserializer.TRUSTED_PACKAGES, trustedPackage);
+        return new DefaultKafkaProducerFactory<>(props);
+    }
+
+    @Bean
+    public KafkaTemplate<String, TransactionDto> transactionDtoKafkaTemplate() {
+        return new KafkaTemplate<>(transactionFactory());
     }
 
 

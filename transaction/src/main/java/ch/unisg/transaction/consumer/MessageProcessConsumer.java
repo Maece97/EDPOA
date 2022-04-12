@@ -48,6 +48,13 @@ public class MessageProcessConsumer {
         //Set the new limit in the singleton
         CheckLimitService checkLimitService = CheckLimitService.getInstance();
         checkLimitService.updateLimit(cardNumber, limit);
+    }
+
+    @KafkaListener(topics = "approved-transactions")
+    public void test(@Payload Object rawDataa){
+        LinkedHashMap rawData = (LinkedHashMap)((ConsumerRecord)rawDataa).value();
+        System.out.println("#######GOT THE TRANSACTION######");
+        System.out.println(rawData);
 
     }
 
