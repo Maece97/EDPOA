@@ -24,6 +24,7 @@ public class MessageProcessConsumer {
     @KafkaListener(topics = "check-pin-result")
     public void checkPin(@Payload Object rawPinCheckDto){
         //Trouble with receiving DTOs via Kafka->receive generic object and cast here
+        System.out.println("Got pin result");
         LinkedHashMap rawData = (LinkedHashMap)((ConsumerRecord)rawPinCheckDto).value();
         PinCheckDto pinCheckDto = new PinCheckDto(rawData);
         messageService.correlateMessagePin(pinCheckDto, "PinCheckedResult");

@@ -17,6 +17,7 @@ public class CheckPinDelegate implements JavaDelegate {
 
     @Override
     public void execute(DelegateExecution delegateExecution) throws Exception {
+        System.out.println("Trigger check pin");
         //Get all values from the process
         String pin = (String)delegateExecution.getVariable("pin");
         String cardNumber = (String) delegateExecution.getVariable("cardNumber");

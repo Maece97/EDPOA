@@ -5,13 +5,11 @@ import org.camunda.bpm.engine.delegate.JavaDelegate;
 import org.springframework.stereotype.Service;
 
 
-@Service("DoSomething")
-public class DoSomethingDelegate implements JavaDelegate {
+@Service("Timeout")
+public class TimeoutDelegate implements JavaDelegate {
     @Override
     public void execute(DelegateExecution delegateExecution) throws Exception {
-        System.out.println("I am in the delegate");
-        System.out.println(delegateExecution.getVariable("amount"));
-        System.out.println("Hit the timeout");
+        System.out.println("#### The approval process timed out - transaction will be rejected #####");
 
     }
 }

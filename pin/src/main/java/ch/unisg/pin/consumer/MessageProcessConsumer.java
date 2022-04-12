@@ -17,7 +17,7 @@ public class MessageProcessConsumer {
    private final KafkaTemplate<String,PinCheckDto> kafkaTemplate;
 
     @KafkaListener(topics = "check-pin")
-    public void checkPin(@Payload PinCheckDto pinCheckDto){
+    public void checkPin(@Payload PinCheckDto pinCheckDto) throws InterruptedException {
         System.out.println("Checking the pin you sent me");
         //Check pin
         PinChecker pinChecker = new PinChecker();
