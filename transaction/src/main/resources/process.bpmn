@@ -144,6 +144,21 @@
       <bpmn:incoming>Flow_0j1st6n</bpmn:incoming>
       <bpmn:outgoing>Flow_1lv0lw6</bpmn:outgoing>
     </bpmn:serviceTask>
+    <bpmn:boundaryEvent id="Event_1ih6zr9" attachedToRef="Activity_11vewd7">
+      <bpmn:outgoing>Flow_1pv42ip</bpmn:outgoing>
+      <bpmn:timerEventDefinition id="TimerEventDefinition_0y4zsfd">
+        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT3S</bpmn:timeDuration>
+      </bpmn:timerEventDefinition>
+    </bpmn:boundaryEvent>
+    <bpmn:sequenceFlow id="Flow_1pv42ip" sourceRef="Event_1ih6zr9" targetRef="Activity_0ylq5v7" />
+    <bpmn:serviceTask id="Activity_0ylq5v7" name="Reject Transaction" camunda:delegateExpression="#{Timeout}">
+      <bpmn:incoming>Flow_1pv42ip</bpmn:incoming>
+      <bpmn:outgoing>Flow_1cy9x00</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:endEvent id="Event_1cd6qbl" name="Timed Out">
+      <bpmn:incoming>Flow_1cy9x00</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_1cy9x00" sourceRef="Activity_0ylq5v7" targetRef="Event_1cd6qbl" />
   </bpmn:process>
   <bpmn:message id="Message_12ksifn" name="Transaction" />
   <bpmn:error id="Error_15g3nim" name="invalidTransaction" errorCode="invalidTransaction" />
@@ -176,6 +191,15 @@
         <di:waypoint x="1270" y="120" />
         <di:waypoint x="1322" y="120" />
       </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1pv42ip_di" bpmnElement="Flow_1pv42ip">
+        <di:waypoint x="1100" y="928" />
+        <di:waypoint x="1100" y="990" />
+        <di:waypoint x="1170" y="990" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1cy9x00_di" bpmnElement="Flow_1cy9x00">
+        <di:waypoint x="1270" y="990" />
+        <di:waypoint x="1322" y="990" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="Event_0r5dhhw_di" bpmnElement="Event_12l6vpu">
         <dc:Bounds x="142" y="442" width="36" height="36" />
         <bpmndi:BPMNLabel>
@@ -199,6 +223,15 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1g9z4s3_di" bpmnElement="Activity_0u9qp4e">
         <dc:Bounds x="1170" y="80" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1fk4nw1_di" bpmnElement="Activity_0ylq5v7">
+        <dc:Bounds x="1170" y="950" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1cd6qbl_di" bpmnElement="Event_1cd6qbl">
+        <dc:Bounds x="1322" y="972" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1316" y="1015" width="51" height="14" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_11vewd7_di" bpmnElement="Activity_11vewd7" isExpanded="true">
         <dc:Bounds x="280" y="200" width="1190" height="710" />
@@ -394,6 +427,9 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_10s2ppn_di" bpmnElement="Event_0lbvem1">
         <dc:Bounds x="1082" y="182" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1cm4pxx_di" bpmnElement="Event_1ih6zr9">
+        <dc:Bounds x="1082" y="892" width="36" height="36" />
       </bpmndi:BPMNShape>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
