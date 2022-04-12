@@ -31,7 +31,7 @@ public class KafkaConsumerConfig {
     private String trustedPackage;
 
     @Bean
-    public ConsumerFactory<String, PinCheckDto> consumerFactory() {
+    public ConsumerFactory<String, Object> consumerFactory() {
         Map<String, Object> props = new HashMap<>();
         props.put(
                 ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG,
@@ -40,14 +40,14 @@ public class KafkaConsumerConfig {
                 ConsumerConfig.GROUP_ID_CONFIG,
                 groupId);
         props.put(JsonDeserializer.TRUSTED_PACKAGES, trustedPackage);
-        return new DefaultKafkaConsumerFactory<>(props,new StringDeserializer(),new JsonDeserializer<>(PinCheckDto.class, false));
+        return new DefaultKafkaConsumerFactory<>(props,new StringDeserializer(),new JsonDeserializer<>(Object.class, false));
     }
 
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, PinCheckDto>
+    public ConcurrentKafkaListenerContainerFactory<String, Object>
     kafkaListenerContainerFactory() {
 
-        ConcurrentKafkaListenerContainerFactory<String, PinCheckDto> factory =
+        ConcurrentKafkaListenerContainerFactory<String, Object> factory =
                 new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerFactory());
         return factory;
