@@ -1,6 +1,7 @@
 package ch.unisg.card.controller;
 
 import ch.unisg.card.dto.LimitUpdateDto;
+import ch.unisg.card.service.LimitStore;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.function.StreamBridge;
@@ -22,6 +23,10 @@ class UpdateLimitRestController {
 
     @PostMapping("/update")
     public void startMessageProcess(@RequestBody LimitUpdateDto limitUpdateDto){
+        LimitStore limitStore  = LimitStore.getInstance();
+        limitStore.updateLimit(limitUpdateDto.getCardNumber(), limitUpdateDto.getLimit());
+        System.out.println("Updated limit in limit store. Store currently is like:");
+        System.out.println(limitStore.getLimits());
         kafkaTemplate.send("update-limit",limitUpdateDto);
     }
 
