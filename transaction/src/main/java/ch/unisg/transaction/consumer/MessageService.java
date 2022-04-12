@@ -5,16 +5,12 @@ import ch.unisg.transaction.dto.PinCheckDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import ch.unisg.transaction.dto.CamundaMessageDto;
-import ch.unisg.transaction.util.VariablesUtil;
 import org.camunda.bpm.engine.MismatchingMessageCorrelationException;
 import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.rest.dto.message.MessageCorrelationResultDto;
 import org.camunda.bpm.engine.runtime.MessageCorrelationBuilder;
 import org.camunda.bpm.engine.runtime.MessageCorrelationResult;
 import org.springframework.stereotype.Service;
-
-import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -23,51 +19,18 @@ public class MessageService {
 
     private final RuntimeService runtimeService;
 
-    public MessageCorrelationResult correlateMessage(CamundaMessageDto camundaMessageDto, String messageName) {
-        try {
-            log.info("Consuming message {}", messageName);
-
-            MessageCorrelationBuilder messageCorrelationBuilder = runtimeService.createMessageCorrelation(messageName);
-
-            if (camundaMessageDto.getDto() != null) {
-                Map<String, Object> variables = VariablesUtil.toVariableMap(camundaMessageDto.getDto());
-                messageCorrelationBuilder.setVariables(VariablesUtil.toVariableMap(camundaMessageDto.getDto()));
-            }
-
-            MessageCorrelationResult messageResult = messageCorrelationBuilder.processInstanceBusinessKey(camundaMessageDto.getCorrelationId())
-                    .correlateWithResult();
-
-            String messageResultJson = new ObjectMapper().writeValueAsString(MessageCorrelationResultDto.fromMessageCorrelationResult(messageResult));
-
-            log.info("Correlation successful. Process Instance Id: {}", messageResultJson);
-            log.info("Correlation key used: {}", camundaMessageDto.getCorrelationId());
-
-            return messageResult;
-        } catch (MismatchingMessageCorrelationException e) {
-            log.error("Issue when correlating the message: {}", e.getMessage());
-        } catch (Exception e) {
-            log.error("Unknown issue occurred", e);
-        }
-        return null;
-    }
-
     public MessageCorrelationResult correlateMessagePin(PinCheckDto pinCheckDto, String messageName) {
         try {
-            log.info("Consuming message {}", messageName);
-            log.info("Pin");
+            log.info("Consuming pin message {}", messageName);
 
             MessageCorrelationBuilder messageCorrelationBuilder = runtimeService.createMessageCorrelation(messageName);
 
+            //Need that to prevent concurrent modifications
             Thread.sleep(1000);
-            //messageCorrelationBuilder.setVariable("pin",pinCheckDto.getPin());
-            //messageCorrelationBuilder.setVariable("cardNumber",pinCheckDto.getCardNumber());
-            messageCorrelationBuilder.setVariable("pinCorrect",(boolean)pinCheckDto.isPinCorrect());
 
-            System.out.println("Correlating here in progress");
-            System.out.println(pinCheckDto.getCorrelationId());
+            messageCorrelationBuilder.setVariable("pinCorrect",(boolean)pinCheckDto.isPinCorrect());
             MessageCorrelationResult messageResult = messageCorrelationBuilder.processInstanceBusinessKey(pinCheckDto.getCorrelationId())
                     .correlateWithResult();
-            System.out.println("Correlated");
 
             String messageResultJson = new ObjectMapper().writeValueAsString(MessageCorrelationResultDto.fromMessageCorrelationResult(messageResult));
 
@@ -85,19 +48,15 @@ public class MessageService {
 
     public MessageCorrelationResult correlateMessageBlocking(BlockingCheckDto blockingCheckDto, String messageName) {
         try {
-            log.info("Consuming message {}", messageName);
-            log.info("Blocking");
+            log.info("Consuming blocking message {}", messageName);
 
             MessageCorrelationBuilder messageCorrelationBuilder = runtimeService.createMessageCorrelation(messageName);
 
             Thread.sleep(2000);
             messageCorrelationBuilder.setVariable("checksPassed",(boolean)blockingCheckDto.isChecksPassed());
 
-            System.out.println("Correlating here in progress");
-            System.out.println(blockingCheckDto.getCorrelationId());
             MessageCorrelationResult messageResult = messageCorrelationBuilder.processInstanceBusinessKey(blockingCheckDto.getCorrelationId())
                     .correlateWithResult();
-            System.out.println("Correlated");
 
             String messageResultJson = new ObjectMapper().writeValueAsString(MessageCorrelationResultDto.fromMessageCorrelationResult(messageResult));
 

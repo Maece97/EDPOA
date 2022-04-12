@@ -1,8 +1,5 @@
 package ch.unisg.transaction.delegate;
 
-import camundajar.impl.scala.concurrent.impl.FutureConvertersImpl;
-import ch.unisg.transaction.dto.CamundaMessageDto;
-import ch.unisg.transaction.dto.MessageProcessDto;
 import ch.unisg.transaction.dto.PinCheckDto;
 import lombok.RequiredArgsConstructor;
 import org.camunda.bpm.engine.delegate.DelegateExecution;

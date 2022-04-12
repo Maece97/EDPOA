@@ -24,26 +24,7 @@ public class KafkaTopicConfig {
     }
 
     @Bean
-    public NewTopic startProcessMessageTopic() {
-        return new NewTopic("start-process-message-topic", 1, (short) 1);
-    }
-
-    @Bean
-    public NewTopic intermediateMessageTopic() {
-        return new NewTopic("intermediate-message-topic", 1, (short) 1);
-    }
-
-    @Bean
-    public NewTopic serviceTaskMessageTopic() {
-        return new NewTopic("service-task-message-topic", 1, (short) 1);
-    }
-
-    @Bean
-    public NewTopic exampleTopic(){return new NewTopic("example-topic",1,(short) 1);};
-    @Bean
     public NewTopic checkPinTopic(){return new NewTopic("check-pin",1,(short) 1);};
-    @Bean
-    public NewTopic updateLimitTopic(){return new NewTopic("update-limit",1,(short) 1);};
     @Bean
     public NewTopic checkPinResultTopic(){return new NewTopic("check-pin-result",1,(short) 1);};
 }

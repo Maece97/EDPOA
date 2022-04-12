@@ -37,12 +37,6 @@ public class KafkaConsumerConfig {
         props.put(
                 ConsumerConfig.GROUP_ID_CONFIG,
                 groupId);
-        /**props.put(
-                ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG,
-                StringDeserializer.class);
-        props.put(
-                ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG,
-                PinCheckDto.class);**/
         props.put(JsonDeserializer.TRUSTED_PACKAGES, trustedPackage);
 
         return new DefaultKafkaConsumerFactory<>(props,new StringDeserializer(),new JsonDeserializer<>(BlockingCheckDto.class,false));

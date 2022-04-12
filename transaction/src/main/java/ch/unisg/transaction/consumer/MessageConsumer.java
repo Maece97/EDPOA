@@ -16,7 +16,7 @@ import java.util.LinkedHashMap;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class MessageProcessConsumer {
+public class MessageConsumer {
 
     private final MessageService messageService;
 
@@ -53,6 +53,7 @@ public class MessageProcessConsumer {
 
     @KafkaListener(topics = "approved-transactions")
     public void test(@Payload Object rawDataa){
+        //Just for testing purposes --- Can be commented out
         LinkedHashMap rawData = (LinkedHashMap)((ConsumerRecord)rawDataa).value();
         System.out.println("#######GOT THE TRANSACTION######");
         System.out.println(rawData);

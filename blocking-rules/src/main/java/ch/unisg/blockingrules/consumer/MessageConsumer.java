@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class MessageProcessConsumer {
+public class MessageConsumer {
 
     private final KafkaTemplate<String,BlockingCheckDto> kafkaTemplate;
 

@@ -23,31 +23,7 @@ public class KafkaTopicConfig {
         return new KafkaAdmin(configs);
     }
 
-    @Bean
-    public NewTopic startProcessMessageTopic() {
-        return new NewTopic("start-process-message-topic", 1, (short) 1);
-    }
-
-    @Bean
-    public NewTopic intermediateMessageTopic() {
-        return new NewTopic("intermediate-message-topic", 1, (short) 1);
-    }
-
-    @Bean
-    public NewTopic serviceTaskMessageTopic() {
-        return new NewTopic("service-task-message-topic", 1, (short) 1);
-    }
-
-    @Bean
-    public NewTopic exampleTopic(){return new NewTopic("example-topic",1,(short) 1);};
-    @Bean
-    public NewTopic checkPinTopic(){return new NewTopic("check-pin",1,(short) 1);};
-    @Bean
-    public NewTopic updateLimitTopic(){return new NewTopic("update-limit",1,(short) 1);};
-    @Bean
-    public NewTopic checkPinResultTopic(){return new NewTopic("check-pin-result",1,(short) 1);};
-
-    // This is stuff for cheking the blocking rule
+    // Checking blocking rules
     @Bean
     public NewTopic checkBlockingTopic(){return new NewTopic("check-blocking",1,(short) 1);};
     @Bean
