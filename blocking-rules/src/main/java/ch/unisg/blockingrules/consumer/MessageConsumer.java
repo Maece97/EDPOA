@@ -23,7 +23,7 @@ public class MessageConsumer {
         System.out.println(blockingCheckDto);
         //Check pin
         BlockingChecker blockingChecker = new BlockingChecker();
-        boolean checksPassed = blockingChecker.checkBlockingRules(blockingCheckDto.getCountry());
+        boolean checksPassed = blockingChecker.checkBlockingRules(blockingCheckDto.getCountry(), blockingCheckDto.getMerchantCategory());
         blockingCheckDto.setChecksPassed(checksPassed);
         //send back via Kafka
         kafkaTemplate.send("check-blocking-result",blockingCheckDto);

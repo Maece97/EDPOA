@@ -15,11 +15,13 @@ import java.util.LinkedHashMap;
 public class BlockingCheckDto {
     private String correlationId;
     private String country;
+    private String merchantCategory;
     private boolean checksPassed;
 
     public BlockingCheckDto(LinkedHashMap linkedHashMap){
         this.correlationId = String.valueOf(linkedHashMap.get("correlationId"));
         this.country = String.valueOf(linkedHashMap.get("country"));
+        this.merchantCategory = String.valueOf(linkedHashMap.get("merchantCategory"));
         this.checksPassed = (Boolean)linkedHashMap.get("checksPassed");
     }
 

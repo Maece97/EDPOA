@@ -21,9 +21,10 @@ public class CheckBlockingRulesDelegate implements JavaDelegate {
         //Read all necessary values from the process
         String businessKey = delegateExecution.getBusinessKey();
         String country = (String)delegateExecution.getVariable("country");
+        String merchantCategory = (String)delegateExecution.getVariable("merchantCategory");
         boolean checksPassed = false;
         //Create DTO
-        BlockingCheckDto blockingCheckDto = new BlockingCheckDto(businessKey,country,checksPassed);
+        BlockingCheckDto blockingCheckDto = new BlockingCheckDto(businessKey,country,merchantCategory,checksPassed);
         //Publish DTO via Kafka
         kafkaTemplate.send("check-blocking",blockingCheckDto);
 

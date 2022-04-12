@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 public class BlockingCheckDto {
     private String correlationId;
     private String country;
+    private String merchantCategory;
     private boolean checksPassed;
 
 

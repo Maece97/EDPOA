@@ -33,6 +33,7 @@ public class MessageConsumer {
 
     @KafkaListener(topics = "check-blocking-result")
     public void checkBlocking(@Payload Object rawBlockingCheckDto){
+        System.out.println("Got blocking result");
         //Trouble with receiving DTOs via Kafka->receive generic object and cast here
         LinkedHashMap rawData = (LinkedHashMap)((ConsumerRecord)rawBlockingCheckDto).value();
         BlockingCheckDto blockingCheckDto = new BlockingCheckDto(rawData);
