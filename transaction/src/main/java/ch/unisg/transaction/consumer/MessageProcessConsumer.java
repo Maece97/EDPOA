@@ -38,5 +38,18 @@ public class MessageProcessConsumer {
         messageService.correlateMessageBlocking(blockingCheckDto,"BlockingCheckedResult");
     }
 
+    @KafkaListener(topics = "update-limit")
+    public void updateLimit(@Payload Object rawLimitUpdate){
+        System.out.println("Updating Limit here");
+        LinkedHashMap rawData = (LinkedHashMap)((ConsumerRecord)rawLimitUpdate).value();
+        //parse data from the DTO
+        String cardNumber = String.valueOf(rawData.get("cardNumber"));
+        int limit = Integer.parseInt(String.valueOf(rawData.get("limit")));
+        //Set the new limit in the singleton
+        CheckLimitService checkLimitService = CheckLimitService.getInstance();
+        checkLimitService.updateLimit(cardNumber, limit);
+
+    }
+
 
 }
