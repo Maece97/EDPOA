@@ -15,6 +15,11 @@ public class CheckPinDelegate implements JavaDelegate {
     @Override
     public void execute(DelegateExecution delegateExecution) throws Exception {
         System.out.println("Trigger check pin");
+        //Update number of tries to keep track of the retries
+        int tries = Integer.valueOf((String)delegateExecution.getVariable("tries"));
+        tries = tries + 1 ;
+        delegateExecution.setVariable("tries",String.valueOf(tries));
+
         //Get all values from the process
         String pin = (String)delegateExecution.getVariable("pin");
         String cardNumber = (String) delegateExecution.getVariable("cardNumber");
