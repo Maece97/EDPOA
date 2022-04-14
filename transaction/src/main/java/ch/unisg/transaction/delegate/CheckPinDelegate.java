@@ -19,7 +19,7 @@ public class CheckPinDelegate implements JavaDelegate {
         int tries = Integer.valueOf((String)delegateExecution.getVariable("tries"));
         tries = tries + 1 ;
         delegateExecution.setVariable("tries",String.valueOf(tries));
-
+        System.out.println("Current number of pin retries: "+ tries);
         //Get all values from the process
         String pin = (String)delegateExecution.getVariable("pin");
         String cardNumber = (String) delegateExecution.getVariable("cardNumber");
