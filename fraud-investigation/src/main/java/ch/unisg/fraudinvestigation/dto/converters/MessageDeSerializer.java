@@ -1,4 +1,4 @@
-package ch.unisg.model.dto.converters;
+package ch.unisg.fraudinvestigation.dto.converters;
 import java.io.IOException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.kafka.common.errors.SerializationException;
 import org.apache.kafka.common.serialization.Deserializer;
 
-import ch.unisg.model.dto.Message;
+import ch.unisg.fraudinvestigation.dto.Message;
 
 public class MessageDeSerializer implements Deserializer<Message<?>> {
 

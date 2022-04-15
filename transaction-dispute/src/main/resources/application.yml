@@ -1,12 +1,12 @@
 server:
-  port: 8101
+  port: 8103
 
 spring:
   cloud:
     stream:
       # Define function names which are available to use inside the application
       function:
-        definition: transaction;possibleFraudTransaction;fraudulentTransaction
+        definition: createFraudDispute;fraudulentTransaction
       # Bindings/Mappings for the functions defined above
       bindings:
         # input - <functionName> + -in- + <index>
@@ -15,17 +15,14 @@ spring:
         # input or output binding. It is always 0 for typical single input/output function, so it’s only relevant for
         # Functions with multiple input and output arguments.
         # More: https://docs.spring.io/spring-cloud-stream/docs/current/reference/html/spring-cloud-stream.html#_functional_binding_names
-        fraudulentTransaction-in-0:
+        # confirmedTransaction-in-0:
+        #   destination: queue.confirmed.transaction
+        #   binder: kafka1
+        createFraudDispute-in-0:
+          destination: queue.createFraudDispute
+          binder: kafka1
+        fraudulentTransaction-out-0:
           destination: queue.fraudulentTransaction
-          binder: kafka1
-        transaction-in-0:
-          destination: queue.transaction
-          binder: kafka1
-        transaction-out-0:
-          destination: queue.transaction
-          binder: kafka1
-        possibleFraudTransaction-out-0:
-          destination: queue.possibleFraudTransaction
           binder: kafka1
       # Define available binders & properties which can be used for the bindings above. We can define different broker
       # or also multiple of the same broker
@@ -45,10 +42,10 @@ spring:
                     default:
                       consumer:
                         configuration:
-                          value.deserializer: ch.unisg.model.dto.converters.MessageDeSerializer
+                          value.deserializer: ch.unisg.transactiondispute.dto.converters.MessageDeSerializer
                       producer:
                         configuration:
-                          value.serializer: ch.unisg.model.dto.converters.MessageSerializer
+                          value.serializer: ch.unisg.transactiondispute.dto.converters.MessageSerializer
       default:
         consumer:
           use-native-decoding: true # This enables using the custom serializer

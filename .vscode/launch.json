@@ -21,6 +21,28 @@
       "projectName": "transaction",
       "args": "",
       "envFile": "${workspaceFolder}/.env"
+    },
+    {
+      "type": "java",
+      "name": "Spring Boot-FraudInvestigationApplication<fraud-investigation>",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "console": "internalConsole",
+      "mainClass": "ch.unisg.fraudinvestigation.FraudInvestigationApplication",
+      "projectName": "fraud-investigation",
+      "args": "",
+      "envFile": "${workspaceFolder}/.env"
+    },
+    {
+      "type": "java",
+      "name": "Spring Boot-TransactionDisputeApplication<transaction-dispute>",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "console": "internalConsole",
+      "mainClass": "ch.unisg.transactiondispute.TransactionDisputeApplication",
+      "projectName": "transaction-dispute",
+      "args": "",
+      "envFile": "${workspaceFolder}/.env"
     }
   ]
 }

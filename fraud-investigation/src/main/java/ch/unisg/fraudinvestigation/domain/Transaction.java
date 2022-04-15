@@ -1,13 +1,14 @@
-package ch.unisg.model.domain;
+package ch.unisg.fraudinvestigation.domain;
 
-import ch.unisg.model.KafkaProducer;
-import ch.unisg.model.dto.TransactionTransferObject;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.sql.Timestamp;
 import java.util.Random;
 import java.util.UUID;
+
+import ch.unisg.fraudinvestigation.KafkaProducer;
+import ch.unisg.fraudinvestigation.dto.TransactionTransferObject;
 
 public class Transaction {
     @Getter
@@ -56,13 +57,16 @@ public class Transaction {
         this.kafkaProducer = kafkaProducer;
     }
 
+    // Mock function to simulate if fraud was real or not
+    // In reality a customer agent would call the card holder and ask them about the transaction
     public void acceptOrDecline(){
-        String [] options = {"accept", "decline"};
+        String [] options = {"fraud", "noFraud"};
         int choice = new Random().nextInt(options.length);
         String currentTransaction  = this.getId().toString();
         System.out.println(currentTransaction + ":" + options[choice]);
-        if(choice == 1) {
-            this.kafkaProducer.possibleFraudDetected(this);
+        if(choice == 0) {
+            System.out.println("Fraud confirmed! Creating fraud dispute.");
+            this.kafkaProducer.createFraudDispute(this);
         }
     }
 

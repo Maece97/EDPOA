@@ -1,9 +1,9 @@
-package ch.unisg.model.dto;
+package ch.unisg.transactiondispute.dto;
 import java.sql.Timestamp;
 import java.util.LinkedHashMap;
 import java.util.UUID;
 
-import ch.unisg.model.domain.Transaction;
+import ch.unisg.transactiondispute.domain.Transaction;
 import lombok.Getter;
 import lombok.Setter;
 

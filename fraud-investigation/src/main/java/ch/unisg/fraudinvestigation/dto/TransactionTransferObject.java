@@ -1,9 +1,9 @@
-package ch.unisg.model.dto;
+package ch.unisg.fraudinvestigation.dto;
 import java.sql.Timestamp;
 import java.util.LinkedHashMap;
 import java.util.UUID;
 
-import ch.unisg.model.domain.Transaction;
+import ch.unisg.fraudinvestigation.domain.Transaction;
 import lombok.Getter;
 import lombok.Setter;
 
