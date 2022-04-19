@@ -19,11 +19,11 @@ spring:
           destination: queue.fraudulentTransaction
           binder: kafka1
         transaction-in-0:
-          destination: queue.transaction
+          destination: approved-transactions
           binder: kafka1
-        transaction-out-0:
-          destination: queue.transaction
-          binder: kafka1
+        # transaction-out-0:
+        #   destination: queue.transaction
+        #   binder: kafka1
         possibleFraudTransaction-out-0:
           destination: queue.possibleFraudTransaction
           binder: kafka1

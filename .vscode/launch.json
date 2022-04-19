@@ -43,6 +43,17 @@
       "projectName": "transaction-dispute",
       "args": "",
       "envFile": "${workspaceFolder}/.env"
+    },
+    {
+      "type": "java",
+      "name": "Spring Boot-Application<transaction>",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "console": "internalConsole",
+      "mainClass": "ch.unisg.transaction.Application",
+      "projectName": "transaction",
+      "args": "",
+      "envFile": "${workspaceFolder}/.env"
     }
   ]
 }
