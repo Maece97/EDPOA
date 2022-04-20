@@ -2,7 +2,7 @@
 
 ## General Description
 
-Our system is a credit card transaction processing system that both processes transactions coming in and detects fraudulent transactions. Below you will find a basic system overview:
+Our system is a credit card transaction processing system that both processes transactions coming in and detects fraudulent transactions. Below you will find a basic system overview. The services highlighted in blue make up the Transaction workflow, while the services highlighted in green make up the Fraud Detection workflow. Blue arrows indicate synchronous communication, and black arrows asynchronous communication:
 
 ![alt text](doc/diagrams/System%20Overview.png)
 
