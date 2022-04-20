@@ -98,12 +98,6 @@ You can find our ADRs here
 
 TODO add link
 
-## Editorial Notes
-
-In this section we explain some things and decisions that might not be clear from the other sections or documents.
-
-- The Card service only contains the card limit in our implementation. In practice this service should also contain more information on the card and more business logic about how that information can change. For example, it should contain the status of the card (open, closed, etc.) and business logic on how these can change. 
-
 ## Diagrams
 See system diagrams under TODO add links
 
@@ -111,10 +105,31 @@ See system diagrams under TODO add links
 
 ### Assignment 1 - Experiment with Kafka:
 
-## Reflections
-Marcel is indeed the 🐐 
+For our system we decided to investigate two aspects of Kafka and how they can lead to data loss. These two aspects are consumer lag and offset misconfigurations.
 
-Use this to outline where we maybe made mistakes in the design eg breaking boundaries 
+- **The Risk of Data Loss Due to Consumer Lag**:
+Consumer lag occurs when producers write messages to a topic at a faster rate than consumers consume them. This is highly relevant to our system due to the highly elastic nature of credit card transactions - where there can be large spikes in the number of incoming transactions. When consumer lag occurs, you will notice that the difference between the offset of the lastest message and the consumer offset grows larger, or in other words the backlog of unprocessed messages starts growing. If this backlog becomes large enough, it can happen that messages get lost due to them becoming older than the retention policy allows for or the storage size limit being reached before they get processed. This would then potentially lead to those messages getting lost. To experiment with this concept, you can create a simple producer that produces messages very fast and a simple consumer that takes long to process each message before consuming the next one. If you then set the retention policy to some small amount of time, you will see that messages will start to get deleted before they are consumed.
+
+- **The Risk of Data Loss Due to Offset Misconfigurations**: In testing the aspect described above we also discovered another interesting aspect of Kafka that can lead to data loss. When a consumer starts to read a partition that does not have a committed offset, or if the committed offset it has is invalid (e.g. because the record it points to has already been deleted), then Kafka assigns it one of three values, based on the auto.offset.reset property. If this property is set to "latest" (which is the default), then the consumer will start reading from the latest message. If the value is "ealiest", then the consumer will start reading from the earliest valid offset for the partition (i.e. it will read all the messages in the partition). If the value is none, then an exception will be thrown when attempting to consume from a valid offset. The intersting thing is that the default value, "latest", can cause data loss. Consider the example where we are using this default value and we are experiencing serious consumer lag. Consumer A is reading from partitions 1 and 2. Consumer A is so far behind that their last committed offest for patition 2 refers to a message that has already been deleted. Now, if a new consumer join and during rebalancing gets assigned to parition 2, then the new consumer will start reading from the latest message. This means that all of the messages between the earliest and the latest message will not be read by the new consumer and if this is not noticed by an administrator in time these messages will eventually be deleted and lost. To experiment with this concept, set up the same scenario as described for the previous concept. Once the last committed offset is older than the oldest message retained in a partition, add a new consumer to the consumer group. If you are (un)lucky enough, then the new consumer will be assigned to this partition and will start reading from the latest message. You will notice that the ealier messages will be effectively ignored and eventually deleted.
+
+## Reflections
+
+This section will outline learnings we have gained from designing and implementing our system. 
+
+- What we found out from working with Kafka is that it is very easy to set up, but you have to be careful to set it up right so that you don't experience unexpected consequences such as data loss. For example, you should have enough partitions in order to be able to scale your number of consumers to keep up with producers that produce faster than a sungle consumer/thread can keep up with. Moreover, you need to carefully read through the default configuration values before moving into production. Failing to do so can lead to the situation described in our Results section where old messages where ignored by a new consumer - a behaviour you wouldn't expect as the default one. 
+- Camunda is very handy. However, it does have a steep learning curve. 
+- Asynchronous workflows in Camunda need special care (concurrent process modification, timing issues, correlation of messages…)
+- Camunda does not use a new thread for parallel running activities (would have saved me probably a day of work :D)
+- Special issues with async execution and Camunda: if the process instance is prematurely terminated (error etc) and a message is correlated with this instance it just crashes
+- Mixing Spring-Kafka and Cloud Streams did not work very well TODO EXPAND
+- Pretty nice about Kafka (not necessarily useful or Kafka specific but came to my mind quite often): No need to worry about those shitty ports and changing the environment @ 128593 different places
+
+
+## Editorial Notes
+
+In this section we explain some things and decisions that might not be clear from the other sections or documents.
+
+- The Card service only contains the card limit in our implementation. In practice this service should also contain more information on the card and more business logic about how that information can change. For example, it should contain the status of the card (open, closed, etc.) and business logic on how these can change. 
 
 ## Responsibilities 
 TL;DR We all did everything together, and I mean EVERYTHING 😈

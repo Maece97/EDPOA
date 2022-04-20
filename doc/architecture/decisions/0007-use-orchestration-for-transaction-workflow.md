@@ -18,5 +18,4 @@ The most important reason for why this workflow should be centralised is the sem
 
 ## Consequences
 
-Mainly the coupling and the Transaction service as a central point of failure. 
-TODO: flesh out
+Having an orchestrator does introduce a central point of failure - which in this case would be the transaction service. However, a choreographed version of this workflow would probably have this central point of failure as well as the workflow is very complex and it would probably have to follow the front controller pattern. 
