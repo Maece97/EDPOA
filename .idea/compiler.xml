@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="blocking-rules" />
+        <module name="pin" />
+        <module name="transaction" />
+        <module name="card" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="blocking-rules" target="11" />
+      <module name="card" target="11" />
+      <module name="pin" target="11" />
+      <module name="pin_backup" target="11" />
+      <module name="transaction" target="11" />
+      <module name="wrapper" target="1.5" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="blocking-rules" options="-parameters" />
+      <module name="card" options="-parameters" />
+      <module name="pin" options="-parameters" />
+      <module name="pin_backup" options="-parameters" />
+      <module name="transaction" options="" />
+    </option>
+  </component>
+</project>
