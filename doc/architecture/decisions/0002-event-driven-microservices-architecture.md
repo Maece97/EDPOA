@@ -8,7 +8,7 @@ Accepted
 
 ## Context
 
-The system is made up of five distinct bounded contexts. The way that these bounded contexts function together to fulfil the system requirements can be based on many different architectures.
+The system is made up of five $Jonas: just 5? distinct bounded contexts. The way that these bounded contexts function together to fulfil the system requirements can be based on many different architectures.
 
 ## Decision
 

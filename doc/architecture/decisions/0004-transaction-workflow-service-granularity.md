@@ -11,7 +11,7 @@ Accepted
 The four bounded contexts that make up the Transaction Workflow, namely the Transaction Context, the PIN context, the Card context, and the Transaction Blocking Rules Context can all be implemented as consolidated service(s) or as three seperate services.
 
 ## Decision
-
+$Jonas: The card service also needs to be accessed by humans to change the limit. probably we don not want them to go to the core system directly
 All four bounded contexts will be implemented as separete services.
 
 Firstly, the four bounded contexts all have have distinct purposes and reasons to change. The Transaction context is all about the business logic of when a transaction should be accepted or rejected. The PIN context focuses on calculating the correctness of a PIN. The Card context contains business logic about card details and how these can change. Similarly, the Transaction Blocking Rules context contains business logic about temporary rules that block transactions and how these can be changed and by whom. 
