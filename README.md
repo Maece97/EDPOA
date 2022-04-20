@@ -110,8 +110,9 @@ You can find our ADRs [here](doc/architecture/decisions/).
 ## Diagrams
 
 - [Architecture Characteristics Worksheet](doc/diagrams/Architecture%20Characteristics%20Worksheet.pdf)
-- Bounded Contexts Diagram
+- [Bounded Contexts Diagram](doc/diagrams/Bounded%20Contexts%20-%20EDPO.pdf)
 - [System Overview](doc/diagrams/System%20Overview.png)
+- [Transaction Workflow BPMN](doc/diagrams/Transaction%20Workflow%20BPMN.png)
 
 ## Results
 
@@ -134,7 +135,9 @@ This section will outline the learnings we have gained from designing and implem
 - Camunda does not use a new thread for parallel running activities (would have saved me probably a day of work :D)
 - Special issues with async execution and Camunda: if the process instance is prematurely terminated (error etc.) and a message is correlated with this instance, it just crashes
 - Mixing Spring-Kafka and Cloud Streams created some problems we did not think about in the beginning. With the fast configuration of Cloud Streams, it is easy to set up communication between services, but when accepting messages from Spring-Kafka, there is extra configuration needed to get the serialization process working properly.
-- Pretty nice about Kafka (not necessarily useful or Kafka specific but came to my mind quite often): No need to worry about ports and to change the environment @ 128593 different places
+- Pretty nice about Kafka (not necessarily useful or Kafka specific but came to my mind quite often): No need to worry about ports and to change the environment in different places.
+- The transaction service implement some fairly complex logic with respect to the pin validation procedure. This is mainly because this part grew over time, starting from simply checking if the amount is high enough that a pin is required or not. An other option would have been to put this logic in the pin service, to ensure a clear separation of concerns and respect service boundaries. It would be worth considering this option for future refactoring.
+- Differentiating between commands and events was more difficult than expected 
 
 ## Editorial Notes
 
