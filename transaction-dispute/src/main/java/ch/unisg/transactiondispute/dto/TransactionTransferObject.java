@@ -4,34 +4,25 @@ import java.util.LinkedHashMap;
 import java.util.UUID;
 
 import ch.unisg.transactiondispute.domain.Transaction;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
+@Data
 public class TransactionTransferObject {
-    @Getter
-    @Setter
+    //header
     private UUID id;
-    @Getter
-    @Setter
     private Timestamp timestamp;
-    @Getter
-    @Setter
-    private String merchant;
-    @Getter
-    @Setter
-    private double amount;
-    @Getter
-    @Setter
-    private String currency;
-    @Getter
-    @Setter
-    private String cardNumber;
-    @Getter
-    @Setter
     private int pin;
+    //payload
+    private String merchant;
+    private String merchantCategory;
+    private double amount;
+    private String currency;
+    private String cardNumber;
+    private String country;
 
     public TransactionTransferObject(){};
-    public TransactionTransferObject(UUID id, Timestamp timestamp, String merchant, double amount, String currency, String cardNumber, int pin) {
+    public TransactionTransferObject(UUID id, Timestamp timestamp, String merchant, double amount, String currency, 
+        String cardNumber, int pin, String merchantCategory, String country) {
         this.id = id;
         this.timestamp = timestamp;
         this.merchant = merchant;
@@ -39,6 +30,8 @@ public class TransactionTransferObject {
         this.currency = currency;
         this.cardNumber = cardNumber;
         this.pin = pin;
+        this.merchantCategory = merchantCategory;
+        this.country = country;
     }
 
     public TransactionTransferObject(LinkedHashMap map){
@@ -49,6 +42,8 @@ public class TransactionTransferObject {
         this.setMerchant((String)map.get("merchant"));
         this.setTimestamp(new Timestamp((long)map.get("timestamp")));
         this.setPin((int) map.get("pin"));
+        this.setMerchantCategory((String) map.get("merchantCategory"));
+        this.setCountry((String) map.get("country"));
     }
 
     public TransactionTransferObject(Transaction transaction){
@@ -59,6 +54,8 @@ public class TransactionTransferObject {
         this.setMerchant(transaction.getMerchant());
         this.setTimestamp(transaction.getTimestamp());
         this.setPin(transaction.getPin());
+        this.merchantCategory = transaction.getMerchantCategory();
+        this.country = transaction.getCountry();
     }
 
 }

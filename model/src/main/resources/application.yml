@@ -43,15 +43,16 @@ spring:
                       defaultBrokerPort: 29092
                     # set default configuration for all consumer and producer
                     default:
-                      consumer:
-                        configuration:
-                          value.deserializer: ch.unisg.model.dto.converters.MessageDeSerializer
+                      # consumer:
+                      #   configuration:
+                      #     value.deserializer: ch.unisg.model.dto.converters.MessageDeSerializer
                       producer:
                         configuration:
-                          value.serializer: ch.unisg.model.dto.converters.MessageSerializer
+                          value:
+                            serializer: ch.unisg.model.dto.converters.MessageSerializer
       default:
-        consumer:
-          use-native-decoding: true # This enables using the custom serializer
+        # consumer:
+        #   use-native-decoding: true # This enables using the custom serializer
         producer:
           useNativeEncoding: true # This enables using the custom serializer
   jackson:
