@@ -1,0 +1,118 @@
+{
+	"info": {
+		"_postman_id": "5f536141-2d6d-438a-8786-d0e12552c2dd",
+		"name": "EDPO Showcase",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "0. Successful transaction",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"messageName\" : \"Transaction\",\n  \"businessKey\" : \"93421e4e351351ddadadssd12e54\",\n \n  \"processVariables\" : {\n    \"amount\" : {\"value\" : \"5\", \"type\": \"String\"},\n    \"pin\": {\"value\":\"1234\", \"type\":\"String\"},\n    \"cardNumber\": {\"value\":\"123456\", \"type\":\"String\"},\n    \"country\":{\"value\":\"GER\",\"type\":\"String\"},\n    \"merchant\":{\"value\":\"Migros\",\"type\":\"String\"},\n    \"merchantCategory\":{\"value\":\"Bitcoin\",\"type\":\"String\"},\n    \"currency\":{\"value\":\"EUR\",\"type\":\"String\"},\n    \"tries\":{\"value\":\"0\",\"type\":\"String\"}\n\n  }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "localhost:8080/engine-rest/message"
+			},
+			"response": []
+		},
+		{
+			"name": "1. Limit not high enough",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"messageName\" : \"Transaction\",\n  \"businessKey\" : \"93421e4e351351ddadadssd12e50\",\n \n  \"processVariables\" : {\n    \"amount\" : {\"value\" : \"9999\", \"type\": \"String\"},\n    \"pin\": {\"value\":\"1234\", \"type\":\"String\"},\n    \"cardNumber\": {\"value\":\"123456\", \"type\":\"String\"},\n    \"country\":{\"value\":\"GER\",\"type\":\"String\"},\n    \"merchant\":{\"value\":\"Migros\",\"type\":\"String\"},\n    \"merchantCategory\":{\"value\":\"Bitcoin\",\"type\":\"String\"},\n    \"currency\":{\"value\":\"EUR\",\"type\":\"String\"},\n    \"tries\":{\"value\":\"0\",\"type\":\"String\"}\n\n  }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "localhost:8080/engine-rest/message"
+			},
+			"response": []
+		},
+		{
+			"name": "2.Update Limit",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"cardNumber\":\"123456\",\n    \"limit\":\"10000\"\n}"
+				},
+				"url": "localhost:8109/limit/update"
+			},
+			"response": []
+		},
+		{
+			"name": "3. Wrong PIN",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"messageName\" : \"Transaction\",\n  \"businessKey\" : \"93421e4e351351ddadadssd12e51\",\n \n  \"processVariables\" : {\n    \"amount\" : {\"value\" : \"100\", \"type\": \"String\"},\n    \"pin\": {\"value\":\"4564\", \"type\":\"String\"},\n    \"cardNumber\": {\"value\":\"123456\", \"type\":\"String\"},\n    \"country\":{\"value\":\"GER\",\"type\":\"String\"},\n    \"merchant\":{\"value\":\"Migros\",\"type\":\"String\"},\n    \"merchantCategory\":{\"value\":\"Bitcoin\",\"type\":\"String\"},\n    \"currency\":{\"value\":\"EUR\",\"type\":\"String\"},\n    \"tries\":{\"value\":\"0\",\"type\":\"String\"}\n\n  }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "localhost:8080/engine-rest/message"
+			},
+			"response": []
+		},
+		{
+			"name": "4. Fraud model detects no fraud",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"messageName\" : \"Transaction\",\n  \"businessKey\" : \"93421e4e351351ddadadssd12e52\",\n \n  \"processVariables\" : {\n    \"amount\" : {\"value\" : \"5\", \"type\": \"String\"},\n    \"pin\": {\"value\":\"1234\", \"type\":\"String\"},\n    \"cardNumber\": {\"value\":\"123456\", \"type\":\"String\"},\n    \"country\":{\"value\":\"GER\",\"type\":\"String\"},\n    \"merchant\":{\"value\":\"Migros\",\"type\":\"String\"},\n    \"merchantCategory\":{\"value\":\"Retail\",\"type\":\"String\"},\n    \"currency\":{\"value\":\"EUR\",\"type\":\"String\"},\n    \"tries\":{\"value\":\"0\",\"type\":\"String\"}\n\n  }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "localhost:8080/engine-rest/message"
+			},
+			"response": []
+		},
+		{
+			"name": "5. Fraud model detects fraud & create dispute & retrain",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"messageName\" : \"Transaction\",\n  \"businessKey\" : \"93421e4e351351ddadadssd12e54\",\n \n  \"processVariables\" : {\n    \"amount\" : {\"value\" : \"999\", \"type\": \"String\"},\n    \"pin\": {\"value\":\"1337\", \"type\":\"String\"},\n    \"cardNumber\": {\"value\":\"133742069\", \"type\":\"String\"},\n    \"country\":{\"value\":\"CH\",\"type\":\"String\"},\n    \"merchant\":{\"value\":\"NFT-scam.ru\",\"type\":\"String\"},\n    \"merchantCategory\":{\"value\":\"Bitcoin\",\"type\":\"String\"},\n    \"currency\":{\"value\":\"USD\",\"type\":\"String\"},\n    \"tries\":{\"value\":\"0\",\"type\":\"String\"}\n\n  }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "localhost:8080/engine-rest/message"
+			},
+			"response": []
+		}
+	]
+}
