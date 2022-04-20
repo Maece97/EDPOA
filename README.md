@@ -172,5 +172,3 @@ Note: we believe that the work was evenly distributed and that each of the group
     - Wrote the code for the final Transaction Workflow, including all Spring services, as well as the design of the workflow in BPMN and its implementation in Camunda
   - Kristófer: 
     - Wrote the initial version of the Transaction service before it was converted to the Camunda implementation
-
-

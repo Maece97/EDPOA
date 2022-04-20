@@ -1,6 +1,5 @@
 package ch.unisg.model;
 
-import java.util.LinkedHashMap;
 import java.util.function.Consumer;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,17 +21,15 @@ public class ModelApplication {
 	}
 
 	@Bean
-	public Consumer<Message<?>> transaction() {
+	public Consumer<TransactionTransferObject> transaction() {
 		return this::acceptOrDecline;
 	}
 
 	@Autowired
     private KafkaProducer kafkaProducer;
 
-	public void acceptOrDecline (Message<?> message){
-		// Needs to be converted "manually" since the deserializer always returns a HashMap
-		TransactionTransferObject tto = new TransactionTransferObject(((LinkedHashMap)message.getData()));
-		Transaction transaction = new Transaction(tto, kafkaProducer);
+	public void acceptOrDecline (TransactionTransferObject message){
+		Transaction transaction = new Transaction(message, kafkaProducer);
 		transaction.acceptOrDecline();
 	}
 

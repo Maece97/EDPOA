@@ -1,41 +1,31 @@
 package ch.unisg.fraudinvestigation.domain;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import java.sql.Timestamp;
 import java.util.Random;
 import java.util.UUID;
 
 import ch.unisg.fraudinvestigation.KafkaProducer;
 import ch.unisg.fraudinvestigation.dto.TransactionTransferObject;
+import lombok.Data;
 
+@Data
 public class Transaction {
-    @Getter
-    @Setter
+    //header
     private UUID id;
-    @Getter
-    @Setter
     private Timestamp timestamp;
-    @Getter
-    @Setter
-    private String merchant;
-    @Getter
-    @Setter
-    private double amount;
-    @Getter
-    @Setter
-    private String currency;
-    @Getter
-    @Setter
-    private String cardNumber;
-    @Getter
-    @Setter
     private int pin;
+    //payload
+    private String merchant;
+    private String merchantCategory;
+    private double amount;
+    private String currency;
+    private String cardNumber;
+    private String country;
 
     private KafkaProducer kafkaProducer;
 
-    public Transaction(UUID id, Timestamp timestamp, String merchant, double amount, String currency, String cardNumber, int pin, KafkaProducer kafkaProducer) {
+    public Transaction(UUID id, Timestamp timestamp, String merchant, double amount, String currency, String cardNumber, 
+            int pin, String merchantCategory, String country, KafkaProducer kafkaProducer) {
         this.id = id;
         this.timestamp = timestamp;
         this.merchant = merchant;
@@ -43,6 +33,8 @@ public class Transaction {
         this.currency = currency;
         this.cardNumber = cardNumber;
         this.pin = pin;
+        this.merchantCategory = merchantCategory;
+        this.country = country;
         this.kafkaProducer = kafkaProducer;
     }
 
@@ -54,6 +46,8 @@ public class Transaction {
         this.currency = tto.getCurrency();
         this.cardNumber = tto.getCardNumber();
         this.pin = tto.getPin();
+        this.merchantCategory = tto.getMerchantCategory();
+        this.country = tto.getCountry();
         this.kafkaProducer = kafkaProducer;
     }
 

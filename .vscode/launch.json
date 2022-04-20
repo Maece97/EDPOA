@@ -54,6 +54,39 @@
       "projectName": "transaction",
       "args": "",
       "envFile": "${workspaceFolder}/.env"
+    },
+    {
+      "type": "java",
+      "name": "Spring Boot-PinApplication<pin>",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "console": "internalConsole",
+      "mainClass": "ch.unisg.pin.PinApplication",
+      "projectName": "pin",
+      "args": "",
+      "envFile": "${workspaceFolder}/.env"
+    },
+    {
+      "type": "java",
+      "name": "Spring Boot-CardApplication<card>",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "console": "internalConsole",
+      "mainClass": "ch.unisg.card.CardApplication",
+      "projectName": "card",
+      "args": "",
+      "envFile": "${workspaceFolder}/.env"
+    },
+    {
+      "type": "java",
+      "name": "Spring Boot-BlockingRulesApplication<blocking-rules>",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "console": "internalConsole",
+      "mainClass": "ch.unisg.blockingrules.BlockingRulesApplication",
+      "projectName": "blocking-rules",
+      "args": "",
+      "envFile": "${workspaceFolder}/.env"
     }
   ]
 }
