@@ -12,11 +12,13 @@
         <module name="preprocessing" />
         <module name="transaction" />
         <module name="card" />
+        <module name="exchange-rates" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="blocking-rules" target="11" />
       <module name="card" target="11" />
+      <module name="exchange-rates" target="11" />
       <module name="pin" target="11" />
       <module name="pin_backup" target="11" />
       <module name="preprocessing" target="11" />
@@ -28,6 +30,7 @@
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="blocking-rules" options="-parameters" />
       <module name="card" options="-parameters" />
+      <module name="exchange-rates" options="-parameters" />
       <module name="pin" options="-parameters" />
       <module name="pin_backup" options="-parameters" />
       <module name="preprocessing" options="-parameters" />
