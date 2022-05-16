@@ -41,13 +41,12 @@ class UpdateExchangeRateRestController {
         Producer<String, String> producer = new KafkaProducer<String, String>(props);
         Producer<String, String> transactionProd = new KafkaProducer<String, String>(props);
         System.out.println("Start sending messages");
-        for (int i = 0 ;i<20;i++){
             System.out.println("Sending message");
-            producer.send(new ProducerRecord<>("exchange-rates","alice"+i,rate));
-        }
+           // producer.send(new ProducerRecord<>("exchange-rates","hi",rate));
+
 
         System.out.println("Sending a transaction here");
-        transactionProd.send(new ProducerRecord<>("incoming-transactions","hi", "lo"));
+        transactionProd.send(new ProducerRecord<>("incoming-transactions","hi", "something"));
 
         System.out.println("Finished sending message");
         producer.close();
