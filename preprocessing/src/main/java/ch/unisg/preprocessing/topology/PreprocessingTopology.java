@@ -25,14 +25,14 @@ public class PreprocessingTopology {
 
 
         System.out.println("incoming exachnge rates");
-      KTable<String, String> exchangeRates =
-                builder.table("exchange-rates",Consumed.with(Serdes.String(),Serdes.String()));
-      KStream<String,String> stream = exchangeRates.toStream();
+      KTable<String, Double> exchangeRates =
+                builder.table("exchange-rates",Consumed.with(Serdes.String(),Serdes.Double()));
+      KStream<String,Double> stream = exchangeRates.toStream();
       stream.foreach((k,v)-> System.out.println("Key: "+ k + "Value: "+v));
 
       //Joining stuff together
       //Join params
-        Joined<String,String,String> joinParams =
+        /**Joined<String,String,String> joinParams =
         Joined.with(Serdes.String(),Serdes.String(),Serdes.String());
       //Value joiner
         ValueJoiner<String, String, StringTest> testJoiner =
@@ -40,10 +40,10 @@ public class PreprocessingTopology {
         //need some key mapper to join on another field then the actual key --> skript 09/slide 48
         /**KeyValueMapper<String,String,String> keyMapper =
                 (leftKey,string)->{return }*/
-        KStream<String, StringTest> newStream =
-                kStream.join(exchangeRates,testJoiner,joinParams);
+        /**KStream<String, StringTest> newStream =
+                kStream.join(exchangeRates,testJoiner,joinParams);**/
 
-        newStream.foreach((k,v)-> System.out.println("Key: "+ k + "Value: "+v));
+        //newStream.foreach((k,v)-> System.out.println("Key: "+ k + "Value: "+v));
         //KStream<String,String> upper = newStream.mapValues((v)->v.toUpperCase());
         //upper.foreach((k,v)-> System.out.println("Key: "+ k + "Value: "+v));
 

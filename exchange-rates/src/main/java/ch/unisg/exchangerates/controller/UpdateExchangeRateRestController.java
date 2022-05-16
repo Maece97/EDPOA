@@ -27,7 +27,14 @@ class UpdateExchangeRateRestController {
 
 
     @PostMapping("/update")
-    public void startMessageProcess(@RequestBody String rate){
+    public void startMessageProcess(@RequestBody String body){
+        System.out.println(body);
+        String [] splitted = body.split(",");
+        String rate = splitted[0].substring(13);
+        Double exchange_rate = Double.valueOf(rate);
+        System.out.println(rate);
+        String currency = splitted[1].substring(17,20);
+        System.out.println(currency);
 
         System.out.println("Creating producer");
 
@@ -36,17 +43,17 @@ class UpdateExchangeRateRestController {
         props.put(ProducerConfig.ACKS_CONFIG, "all");
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,"localhost:29092");
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringSerializer");
-        props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringSerializer");
+        props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.DoubleSerializer");
 
-        Producer<String, String> producer = new KafkaProducer<String, String>(props);
-        Producer<String, String> transactionProd = new KafkaProducer<String, String>(props);
+        Producer<String, Double> producer = new KafkaProducer<String, Double>(props);
+        //Producer<String, String> transactionProd = new KafkaProducer<String, String>(props);
         System.out.println("Start sending messages");
             System.out.println("Sending message");
-           // producer.send(new ProducerRecord<>("exchange-rates","hi",rate));
+            producer.send(new ProducerRecord<>("exchange-rates", currency,exchange_rate));
 
 
         System.out.println("Sending a transaction here");
-        transactionProd.send(new ProducerRecord<>("incoming-transactions","hi", "something"));
+        //transactionProd.send(new ProducerRecord<>("incoming-transactions","hi", "something"));
 
         System.out.println("Finished sending message");
         producer.close();
