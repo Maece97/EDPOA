@@ -1,6 +1,7 @@
 package ch.unisg.preprocessing.topology;
 
 
+import ch.unisg.preprocessing.dto.Transaction;
 import ch.unisg.preprocessing.models.StringTest;
 import org.apache.kafka.common.protocol.types.Field;
 import org.apache.kafka.common.serialization.Serdes;
@@ -20,15 +21,25 @@ public class PreprocessingTopology {
         StreamsBuilder builder = new StreamsBuilder();
         //create global currency exchange table
         System.out.println("Incoming transactions");
-     KStream<String,String> kStream = builder.stream("incoming-transactions");
+     KStream<String, Transaction> kStream = builder.stream("incoming-transactions");
         kStream.foreach((k,v)-> System.out.println("Key: "+k+" Value: "+v));
 
 
-        System.out.println("incoming exachnge rates");
-      KTable<String, Double> exchangeRates =
-                builder.table("exchange-rates",Consumed.with(Serdes.String(),Serdes.Double()));
-      KStream<String,Double> stream = exchangeRates.toStream();
-      stream.foreach((k,v)-> System.out.println("Key: "+ k + "Value: "+v));
+        //Incoming status update
+        //KStream<String,String> statusStream = builder.stream("card-status");
+        //statusStream.foreach((k,v)-> System.out.println("Key: "+k+" Value: "+v));
+
+        //Create a table with card status
+        KTable<String,String> statusTable =
+                builder.table("card-status",Consumed.with(Serdes.String(),Serdes.String()));
+
+        //Create Table with exchange rates
+        GlobalKTable<String, Double> exchangeRates =
+                builder.globalTable("exchange-rates",Consumed.with(Serdes.String(),Serdes.Double()));
+        System.out.println(exchangeRates);
+
+        //Router
+
 
       //Joining stuff together
       //Join params
