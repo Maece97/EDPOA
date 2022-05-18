@@ -35,11 +35,14 @@ public class PreprocessingTopology {
         // Create a table with card status
         KTable<String,String> statusTable =
                 builder.table("card-status",Consumed.with(Serdes.String(),Serdes.String()));
+        //KStream<String,String> streamm = statusTable.toStream();
+        //streamm.foreach((k,v)-> System.out.println("Status: "+k));
 
         // Create global currency exchange table
-        GlobalKTable<String, Double> exchangeRates =
-                builder.globalTable("exchange-rates",Consumed.with(Serdes.String(),Serdes.Double()));
-        // System.out.println(exchangeRates);
+        KTable<String, Double> exchangeRates =
+                builder.table("exchange-rates",Consumed.with(Serdes.String(),Serdes.Double()));
+        KStream<String,Double> stream = exchangeRates.toStream();
+        stream.foreach((k,v)-> System.out.println(k+v));
 
         //Router
         // Filter out creditcards starting with a "3", because they don't belong to us.
@@ -50,20 +53,41 @@ public class PreprocessingTopology {
         branches[0].to("wrong-card-number", Produced.with(Serdes.String(), new TransactionSerdes()));
 
         KStream<String, Transaction> transactionStream = branches[1];
+        transactionStream.foreach((k,v)-> System.out.println("Before: "+ v.getAmount()+ " "+v.getCurrency()));
 
-        ValueJoiner<Transaction, Double,TransactionWithExchangeRate> exchangeRateJoiner =
-                (transaction, exchangeRate) -> new TransactionWithExchangeRate(transaction,exchangeRate.toString());
-        
-        KeyValueMapper<String,Transaction,String> keyMapper =
-                (leftKey,transaction) -> {
-                        return String.valueOf(transaction.getCurrency());
+        //Joining Exchange Rat
+        transactionStream = transactionStream.selectKey((k,v)->v.getCurrency().toString());
+
+        Joined<String, Transaction, Double> erJoinParams =
+                Joined.with(Serdes.String(), new TransactionSerdes(),Serdes.Double());
+
+        ValueJoiner<Transaction, Double, TransactionWithExchangeRate> erJoiner =
+                (transaction, er) -> {
+                    return new TransactionWithExchangeRate(transaction, String.valueOf(er));
                 };
-        
-        KStream <String,TransactionWithExchangeRate> withExchangeRate =
-                transactionStream.join(exchangeRates, keyMapper, exchangeRateJoiner);
+        KStream<String, TransactionWithExchangeRate> withEr =
+                transactionStream.join(exchangeRates,erJoiner,erJoinParams);
+
+        //Translate currency
+        KStream<String,TransactionWithExchangeRate> translated = withEr.mapValues(TransactionWithExchangeRate::exchangeMoney);
+        translated.foreach((k,v)-> System.out.println("After: "+ v.getAmount()+" "+v.getCurrency()));
+
+
+
+        /**ValueJoiner<Transaction, Double,TransactionWithExchangeRate> exchangeRateJoiner =
+                 (transaction, exchangeRate) -> new TransactionWithExchangeRate(transaction,exchangeRate.toString());
+
+         KeyValueMapper<String,Transaction,String> keyMapper =
+                 (leftKey,transaction) -> {
+                         return String.valueOf(transaction.getCurrency());
+                 };
+
+         KStream <String,TransactionWithExchangeRate> withExchangeRate =
+                 transactionStream.join(exchangeRates, keyMapper, exchangeRateJoiner);
+         withExchangeRate.foreach((k,v)-> System.out.println(v));**/
 
         //Joining with cardStatus
-        ValueJoiner<TransactionWithExchangeRate,String, TransactionWithExchangeRateAndStatus> statusJoiner =
+        /**ValueJoiner<TransactionWithExchangeRate,String, TransactionWithExchangeRateAndStatus> statusJoiner =
                 (transactionEr, status)-> new TransactionWithExchangeRateAndStatus(transactionEr, status);
         
         KeyValueMapper<String,TransactionWithExchangeRate,String> keyMapperStatus =
@@ -72,7 +96,7 @@ public class PreprocessingTopology {
                 };
 
         KStream <String, TransactionWithExchangeRateAndStatus> transactionAndStatus =
-                withExchangeRate.join(statusTable, keyMapperStatus, statusJoiner);
+                withExchangeRate.join(statusTable, keyMapperStatus, statusJoiner);**/
 
       //Joining stuff together
       //Join params

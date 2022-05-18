@@ -44,17 +44,14 @@ class UpdateExchangeRateRestController {
         props.put(ProducerConfig.ACKS_CONFIG, "all");
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,"localhost:29092");
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringSerializer");
-        props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, "ch.unisg.exchangerates.serialization.TransactionSerializer");
+        props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.DoubleSerializer");
 
         Producer<String, Double> producer = new KafkaProducer<String, Double>(props);
-        Producer<String, Transaction> transactionProd = new KafkaProducer<String, Transaction>(props);
         System.out.println("Start sending messages");
             System.out.println("Sending message");
-            // producer.send(new ProducerRecord<>("exchange-rates", currency,exchange_rate));
+            producer.send(new ProducerRecord<>("exchange-rates", currency,exchange_rate));
 
 
-        System.out.println("Sending a transaction here");
-        transactionProd.send(new ProducerRecord<>("incoming-transactions","hi", new Transaction("123",1,"1234")));
 
         System.out.println("Finished sending message");
         producer.close();

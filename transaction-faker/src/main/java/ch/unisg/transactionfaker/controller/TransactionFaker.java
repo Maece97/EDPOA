@@ -48,7 +48,8 @@ public class TransactionFaker {
             t.setAmount(faker.commerce().price(0, 1000));
             t.setCardNumber(faker.finance().creditCard());
             t.setCountry(faker.address().country());
-            t.setCurrency(faker.currency().code());
+            //t.setCurrency(faker.currency().code());
+            t.setCurrency("EUR");
             t.setMerchant(faker.company().name());
             t.setMerchantCategory(faker.company().industry());
             t.setPin(faker.number().digits(4));

@@ -24,4 +24,14 @@ public class TransactionWithExchangeRate extends Transaction {
     @SerializedName("exchangeRate")
     String exchangeRate;
 
+    public TransactionWithExchangeRate exchangeMoney(){
+        System.out.println("Exchanging currency...");
+        Double amount = Double.parseDouble(this.getAmount().replace(",","."));
+        Double exchangeRate = Double.parseDouble(this.getExchangeRate());
+        this.setAmount(String.valueOf(amount*exchangeRate));
+        this.setCurrency("USD");
+        return this;
+
+    }
+
 }
