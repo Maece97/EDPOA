@@ -50,7 +50,7 @@ class UpdateExchangeRateRestController {
         Producer<String, Transaction> transactionProd = new KafkaProducer<String, Transaction>(props);
         System.out.println("Start sending messages");
             System.out.println("Sending message");
-            //producer.send(new ProducerRecord<>("exchange-rates", currency,exchange_rate));
+            // producer.send(new ProducerRecord<>("exchange-rates", currency,exchange_rate));
 
 
         System.out.println("Sending a transaction here");

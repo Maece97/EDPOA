@@ -1,17 +1,49 @@
 package ch.unisg.preprocessing.dto;
 
+import com.google.gson.annotations.SerializedName;
+
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 public class Transaction {
+
+    Transaction(Transaction transaction) {
+        this.cardNumber = transaction.getCardNumber();
+        this.pin = transaction.getPin();
+        this.country = transaction.getCountry();
+        this.merchant = transaction.getMerchant();
+        this.merchantCategory = transaction.getMerchantCategory();
+        this.amount = transaction.getAmount();
+        this.currency = transaction.getCurrency();
+        this.tries = transaction.getTries();
+    }
+
+    @SerializedName("cardNumber")
     String cardNumber;
-    int amount;
+
+    @SerializedName("pin")
+    String pin;
+
+    @SerializedName("country")
+    String country;
+
+    @SerializedName("merchant")
+    String merchant;
+
+    @SerializedName("merchantCategory")
+    String merchantCategory;
+
+    @SerializedName("amount")
+    String amount;
+
+    @SerializedName("currency")
     String currency;
+
+    @SerializedName("tries")
+    String tries;
 
 }

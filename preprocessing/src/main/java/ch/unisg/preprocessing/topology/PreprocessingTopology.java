@@ -2,14 +2,16 @@ package ch.unisg.preprocessing.topology;
 
 
 import ch.unisg.preprocessing.dto.Transaction;
-import ch.unisg.preprocessing.models.StringTest;
+import ch.unisg.preprocessing.dto.TransactionWithExchangeRate;
+import ch.unisg.preprocessing.dto.TransactionWithExchangeRateAndStatus;
+import ch.unisg.preprocessing.serialization.json.TransactionSerdes;
+
 import org.apache.kafka.common.protocol.types.Field;
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.KeyValue;
 import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.Topology;
 import org.apache.kafka.streams.kstream.*;
-import org.apache.tomcat.jni.Global;
 
 import java.util.Locale;
 
@@ -19,27 +21,58 @@ public class PreprocessingTopology {
 
         //construct the topology
         StreamsBuilder builder = new StreamsBuilder();
-        //create global currency exchange table
-        System.out.println("Incoming transactions");
-     KStream<String, Transaction> kStream = builder.stream("incoming-transactions");
-        kStream.foreach((k,v)-> System.out.println("Key: "+k+" Value: "+v));
+
+        // Incoming Transactions
+        KStream<String, Transaction> incomingTransactionStream = 
+                builder.stream("incoming-transactions", Consumed.with(Serdes.String(), new TransactionSerdes()));
+                incomingTransactionStream.foreach((k,v)-> System.out.println("--> Incoming Transaction" + v));
 
 
         //Incoming status update
         //KStream<String,String> statusStream = builder.stream("card-status");
         //statusStream.foreach((k,v)-> System.out.println("Key: "+k+" Value: "+v));
 
-        //Create a table with card status
+        // Create a table with card status
         KTable<String,String> statusTable =
                 builder.table("card-status",Consumed.with(Serdes.String(),Serdes.String()));
 
-        //Create Table with exchange rates
+        // Create global currency exchange table
         GlobalKTable<String, Double> exchangeRates =
                 builder.globalTable("exchange-rates",Consumed.with(Serdes.String(),Serdes.Double()));
-        System.out.println(exchangeRates);
+        // System.out.println(exchangeRates);
 
         //Router
+        // Filter out creditcards starting with a "3", because they don't belong to us.
+        final KStream<String, Transaction>[] branches = incomingTransactionStream.branch(
+                (id, transaction) -> transaction.getCardNumber().startsWith("3"),
+                (id, transaction) -> !transaction.getCardNumber().startsWith("3"));
 
+        branches[0].to("wrong-card-number", Produced.with(Serdes.String(), new TransactionSerdes()));
+
+        KStream<String, Transaction> transactionStream = branches[1];
+
+        ValueJoiner<Transaction, Double,TransactionWithExchangeRate> exchangeRateJoiner =
+                (transaction, exchangeRate) -> new TransactionWithExchangeRate(transaction,exchangeRate.toString());
+        
+        KeyValueMapper<String,Transaction,String> keyMapper =
+                (leftKey,transaction) -> {
+                        return String.valueOf(transaction.getCurrency());
+                };
+        
+        KStream <String,TransactionWithExchangeRate> withExchangeRate =
+                transactionStream.join(exchangeRates, keyMapper, exchangeRateJoiner);
+
+        //Joining with cardStatus
+        ValueJoiner<TransactionWithExchangeRate,String, TransactionWithExchangeRateAndStatus> statusJoiner =
+                (transactionEr, status)-> new TransactionWithExchangeRateAndStatus(transactionEr, status);
+        
+        KeyValueMapper<String,TransactionWithExchangeRate,String> keyMapperStatus =
+                (leftKey, transactionEr) -> {
+                        return String.valueOf(transactionEr.getCardNumber());
+                };
+
+        KStream <String, TransactionWithExchangeRateAndStatus> transactionAndStatus =
+                withExchangeRate.join(statusTable, keyMapperStatus, statusJoiner);
 
       //Joining stuff together
       //Join params
@@ -57,10 +90,10 @@ public class PreprocessingTopology {
         //newStream.foreach((k,v)-> System.out.println("Key: "+ k + "Value: "+v));
         //KStream<String,String> upper = newStream.mapValues((v)->v.toUpperCase());
         //upper.foreach((k,v)-> System.out.println("Key: "+ k + "Value: "+v));
-
+        
+        // System.out.println("--> Outgoing Transaction");
 
         return builder.build();
-
 
     }
 }

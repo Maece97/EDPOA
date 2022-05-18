@@ -1,27 +1,18 @@
 package ch.unisg.preprocessing;
 
-import ch.unisg.preprocessing.topology.PreprocessingTopology;
+import java.util.Properties;
+
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.KafkaStreams;
-import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.StreamsConfig;
 import org.apache.kafka.streams.Topology;
-import org.apache.kafka.streams.kstream.Consumed;
-import org.apache.kafka.streams.kstream.GlobalKTable;
-import org.apache.kafka.streams.kstream.KStream;
-import org.apache.kafka.streams.kstream.KTable;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import java.util.Properties;
+import ch.unisg.preprocessing.topology.PreprocessingTopology;
 
-@SpringBootApplication
 public class PreprocessingApplication {
 
-	public static <StreamBuilder> void main(String[] args) {
-		SpringApplication.run(PreprocessingApplication.class, args);
-
+	public static void main(String[] args) {
 		Topology topology = PreprocessingTopology.build();
 
 
@@ -46,11 +37,11 @@ public class PreprocessingApplication {
 
 
 		//build the topology
-		System.out.println("Builing topology");
 		KafkaStreams streams = new KafkaStreams(topology, props);
 		streams.start();
 
-
+		// close Kafka Streams when the JVM shuts down (e.g. SIGTERM)
+		Runtime.getRuntime().addShutdownHook(new Thread(streams::close));
 
 	}
 

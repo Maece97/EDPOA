@@ -1,10 +1,10 @@
-package ch.unisg.preprocessing;
+package ch.unisg.transactionfaker;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class PreprocessingApplicationTests {
+class TransactionFakerApplicationTests {
 
 	@Test
 	void contextLoads() {
