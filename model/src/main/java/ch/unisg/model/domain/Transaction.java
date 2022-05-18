@@ -52,6 +52,19 @@ public class Transaction {
     }
 
     public void acceptOrDecline(){
+
+        // mock for demo
+        if (this.getMerchantCategory().equalsIgnoreCase("Retail")) {
+            System.out.println(this.getId().toString() + ":" + "accept");
+            return;
+        }
+        // mock for demo
+        if (this.getMerchant().equalsIgnoreCase("NFT-scam.ru")) {
+            System.out.println(this.getId().toString() + ":" + "decline");
+            this.kafkaProducer.possibleFraudDetected(this);
+            return;
+        }
+
         String [] options = {"accept", "decline"};
         int choice = new Random().nextInt(options.length);
         String currentTransaction  = this.getId().toString();

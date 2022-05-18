@@ -54,6 +54,15 @@ public class Transaction {
     // Mock function to simulate if fraud was real or not
     // In reality a customer agent would call the card holder and ask them about the transaction
     public void acceptOrDecline(){
+
+        // mock for demo
+        if (this.getMerchant().equalsIgnoreCase("NFT-scam.ru")) {
+            System.out.println("Fraud confirmed! Creating fraud dispute.");
+            System.out.println(this.getId().toString() + ":" + "fraud");
+            this.kafkaProducer.createFraudDispute(this);
+            return;
+        }
+
         String [] options = {"fraud", "noFraud"};
         int choice = new Random().nextInt(options.length);
         String currentTransaction  = this.getId().toString();
