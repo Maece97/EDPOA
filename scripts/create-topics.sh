@@ -14,4 +14,11 @@ kafka-topics \
   --replication-factor 1 \
   --partitions 1 \
   --create
+# Test topic
+kafka-topics \
+  --bootstrap-server kafka:9092 \
+  --topic src-topic \
+  --replication-factor 1 \
+  --partitions 1 \
+  --create
 sleep infinity

@@ -1,3 +1,5 @@
 {
-  "java.configuration.updateBuildConfiguration": "automatic"
+  "java.configuration.updateBuildConfiguration": "automatic",
+  "terminal.integrated.fontSize": 12,
+  "editor.fontSize": 12
 }

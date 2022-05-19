@@ -7,6 +7,7 @@ import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.StreamsConfig;
 import org.apache.kafka.streams.Topology;
+import org.apache.log4j.BasicConfigurator;
 
 import ch.unisg.preprocessing.topology.PreprocessingTopology;
 
@@ -35,6 +36,7 @@ public class PreprocessingApplication {
 		KafkaStreams streams = new KafkaStreams(topology1,props);
 		streams.start();**/
 
+		// BasicConfigurator.configure();
 
 		//build the topology
 		KafkaStreams streams = new KafkaStreams(topology, props);

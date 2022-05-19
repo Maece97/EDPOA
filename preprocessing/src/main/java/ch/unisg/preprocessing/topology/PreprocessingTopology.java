@@ -29,16 +29,16 @@ public class PreprocessingTopology {
 
 
         //Incoming status update
-        //KStream<String,String> statusStream = builder.stream("card-status");
-        //statusStream.foreach((k,v)-> System.out.println("Key: "+k+" Value: "+v));
+        KStream<String,String> statusStream = builder.stream("card-status");
+                statusStream.foreach((k,v)-> System.out.println("Key: "+k+" Value: "+v));
 
         // Create a table with card status
-        KTable<String,String> statusTable =
-                builder.table("card-status",Consumed.with(Serdes.String(),Serdes.String()));
-        //KStream<String,String> streamm = statusTable.toStream();
-        //streamm.foreach((k,v)-> System.out.println("Status: "+k));
+        // KTable<String,String> statusTable =
+        //         builder.table("card-status",Consumed.with(Serdes.String(),Serdes.String()));
+        // //KStream<String,String> streamm = statusTable.toStream();
+        // //streamm.foreach((k,v)-> System.out.println("Status: "+k));
 
-        // Create global currency exchange table
+        // // Create global currency exchange table
         KTable<String, Double> exchangeRates =
                 builder.table("exchange-rates",Consumed.with(Serdes.String(),Serdes.Double()));
         KStream<String,Double> stream = exchangeRates.toStream();
@@ -68,7 +68,7 @@ public class PreprocessingTopology {
         KStream<String, TransactionWithExchangeRate> withEr =
                 transactionStream.join(exchangeRates,erJoiner,erJoinParams);
 
-        //Translate currency
+        // // //Translate currency
         KStream<String,TransactionWithExchangeRate> translated = withEr.mapValues(TransactionWithExchangeRate::exchangeMoney);
         translated.foreach((k,v)-> System.out.println("After: "+ v.getAmount()+" "+v.getCurrency()));
 

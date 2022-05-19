@@ -2,6 +2,13 @@
   "configurations": [
     {
       "type": "java",
+      "name": "Launch TransactionPostprocessingApplication",
+      "request": "launch",
+      "mainClass": "ch.unisg.transactionpostprocessing.TransactionPostprocessingApplication",
+      "projectName": "transaction-postprocessing"
+    },
+    {
+      "type": "java",
       "name": "Launch PreprocessingApplication",
       "request": "launch",
       "mainClass": "ch.unisg.preprocessing.PreprocessingApplication",
@@ -103,6 +110,17 @@
       "console": "internalConsole",
       "mainClass": "ch.unisg.transactionfaker.TransactionFakerApplication",
       "projectName": "transaction-faker",
+      "args": "",
+      "envFile": "${workspaceFolder}/.env"
+    },
+    {
+      "type": "java",
+      "name": "Spring Boot-ExchangeRatesApplication<exchange-rates>",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "console": "internalConsole",
+      "mainClass": "ch.unisg.exchangerates.ExchangeRatesApplication",
+      "projectName": "exchange-rates",
       "args": "",
       "envFile": "${workspaceFolder}/.env"
     }

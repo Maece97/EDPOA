@@ -45,7 +45,8 @@ public class TransactionFaker {
         for (int i = 0; i < fakeTransactions; i++) {
             Transaction t = new Transaction();
 
-            t.setAmount(faker.commerce().price(0, 1000));
+            // t.setAmount(faker.commerce().price(0, 1000));
+            t.setAmount("100");
             t.setCardNumber(faker.finance().creditCard());
             t.setCountry(faker.address().country());
             //t.setCurrency(faker.currency().code());
@@ -64,7 +65,7 @@ public class TransactionFaker {
         Gson gson = new Gson();
 
         Properties props = new Properties();
-        props.put(ProducerConfig.CLIENT_ID_CONFIG,"client");
+        props.put(ProducerConfig.CLIENT_ID_CONFIG,"faker");
         props.put(ProducerConfig.ACKS_CONFIG, "all");
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,"localhost:29092");
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringSerializer");
