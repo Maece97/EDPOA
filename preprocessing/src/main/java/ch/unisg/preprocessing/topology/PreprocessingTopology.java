@@ -1,6 +1,7 @@
 package ch.unisg.preprocessing.topology;
 
 
+import ch.unisg.preprocessing.controller.ForwardTransactionRestController;
 import ch.unisg.preprocessing.dto.Transaction;
 import ch.unisg.preprocessing.dto.TransactionWithExchangeRate;
 import ch.unisg.preprocessing.dto.TransactionWithExchangeRateAndStatus;
@@ -22,6 +23,8 @@ public class PreprocessingTopology {
 
         //construct the topology
         StreamsBuilder builder = new StreamsBuilder();
+        //forwarder
+        ForwardTransactionRestController forwardTransactionRestController = new ForwardTransactionRestController();
 
         // Incoming Transactions
         KStream<String, Transaction> incomingTransactionStream = 
@@ -84,6 +87,10 @@ public class PreprocessingTopology {
                 translated.join(statusTable, statusJoiner,statusJoinParams);
 
         withErAndStatus.foreach((k,v)-> System.out.println("Key: "+k+ " Value: "+v));
+        withErAndStatus.foreach((k,v)->{
+            forwardTransactionRestController.forwardTransaction("123","20",v.getPin(),v.getCardNumber(),v.getCountry(),
+                    v.getMerchant(),v.getMerchantCategory(),v.getCurrency(),v.getTries(),v.getStatus(),v.getExchangeRate());
+        });
 
 
 
