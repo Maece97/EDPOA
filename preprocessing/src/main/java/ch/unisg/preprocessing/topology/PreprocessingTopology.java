@@ -87,8 +87,12 @@ public class PreprocessingTopology {
                 translated.join(statusTable, statusJoiner,statusJoinParams);
 
         withErAndStatus.foreach((k,v)-> System.out.println("Key: "+k+ " Value: "+v));
+        //Forward to transaction service
         withErAndStatus.foreach((k,v)->{
-            forwardTransactionRestController.forwardTransaction("123","20",v.getPin(),v.getCardNumber(),v.getCountry(),
+            String amount = v.getAmount();
+            //Camunda wants to have ints thats why we cut off after comma
+            amount = amount.split("[.]")[0];
+            forwardTransactionRestController.forwardTransaction("123",amount,v.getPin(),v.getCardNumber(),v.getCountry(),
                     v.getMerchant(),v.getMerchantCategory(),v.getCurrency(),v.getTries(),v.getStatus(),v.getExchangeRate());
         });
 
