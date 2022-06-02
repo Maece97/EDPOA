@@ -29,6 +29,7 @@ class UpdateExchangeRateRestController {
 
     @PostMapping("/update")
     public void startMessageProcess(@RequestBody String body){
+        //TODO: Fix that nightmare of a code
         System.out.println(body);
         String [] splitted = body.split(",");
         String rate = splitted[0].substring(13);

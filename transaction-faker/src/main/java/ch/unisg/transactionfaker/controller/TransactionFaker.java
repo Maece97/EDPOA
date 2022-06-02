@@ -72,7 +72,7 @@ public class TransactionFaker {
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringSerializer");
 
         for (Transaction transaction : transactions) {
-            String requestBody = "{\"cardNumber\":\"" + transaction.getCardNumber() + "\", \"limit\":\"" + faker.number().numberBetween(450, 100000) + "\",\"status\": \"true\"}";
+            String requestBody = "{\"cardNumber\":\"" + transaction.getCardNumber() + "\", \"limit\":\"" + faker.number().numberBetween(450, 100000) + "\",\"status\": \"open\"}";
 
             HttpRequest request = HttpRequest.newBuilder()
             .uri(URI.create("http://localhost:8109/limit/update"))
