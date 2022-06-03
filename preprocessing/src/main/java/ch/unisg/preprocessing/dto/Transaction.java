@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 public class Transaction {
 
     Transaction(Transaction transaction) {
+        this.id = transaction.getId();
         this.cardNumber = transaction.getCardNumber();
         this.pin = transaction.getPin();
         this.country = transaction.getCountry();
@@ -21,6 +22,9 @@ public class Transaction {
         this.currency = transaction.getCurrency();
         this.tries = transaction.getTries();
     }
+
+    @SerializedName("id")
+    String id;
 
     @SerializedName("cardNumber")
     String cardNumber;
@@ -45,5 +49,7 @@ public class Transaction {
 
     @SerializedName("tries")
     String tries;
+
+
 
 }

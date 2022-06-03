@@ -22,10 +22,12 @@ public class TimeoutDelegate implements JavaDelegate {
         String merchantCategory = (String)delegateExecution.getVariable("merchantCategory");
         String currency = (String)delegateExecution.getVariable("currency");
         String tries = (String)delegateExecution.getVariable("tries");
+        String status = (String)delegateExecution.getVariable("status");
+        String exchangeRate = (String) delegateExecution.getVariable("exchangeRate");
         //Resend the transaction here
         ResendTransactionController resendTransactionController = new ResendTransactionController();
         resendTransactionController.resendTransaction(businessKey,amount,pin,cardNumber,country,merchant,merchantCategory,
-                currency,tries);
+                currency,tries,status,exchangeRate);
 
     }
 }

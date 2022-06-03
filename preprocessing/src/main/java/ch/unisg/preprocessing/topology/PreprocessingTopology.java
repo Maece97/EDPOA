@@ -92,7 +92,7 @@ public class PreprocessingTopology {
             String amount = v.getAmount();
             //Camunda wants to have ints thats why we cut off after comma
             amount = amount.split("[.]")[0];
-            forwardTransactionRestController.forwardTransaction("123",amount,v.getPin(),v.getCardNumber(),v.getCountry(),
+            forwardTransactionRestController.forwardTransaction(v.getId(),amount,v.getPin(),v.getCardNumber(),v.getCountry(),
                     v.getMerchant(),v.getMerchantCategory(),v.getCurrency(),v.getTries(),v.getStatus(),v.getExchangeRate());
         });
 

@@ -7,6 +7,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.Properties;
+import java.util.UUID;
 
 import com.github.javafaker.Faker;
 import com.google.gson.Gson;
@@ -44,18 +45,23 @@ public class TransactionFaker {
 
         for (int i = 0; i < fakeTransactions; i++) {
             Transaction t = new Transaction();
-
-            // t.setAmount(faker.commerce().price(0, 1000));
+            double randNr = Math.random();
+            System.out.println(randNr);
+            //t.setAmount(faker.commerce().price(0, 1000));
+            t.setId(UUID.randomUUID().toString());
             t.setAmount("100");
-            //t.setCardNumber(faker.finance().creditCard());
-            t.setCardNumber("12345678");
+            t.setCardNumber(faker.finance().creditCard());
             t.setCountry(faker.address().country());
             //t.setCurrency(faker.currency().code());
             t.setCurrency("EUR");
             t.setMerchant(faker.company().name());
             t.setMerchantCategory(faker.company().industry());
-            //t.setPin(faker.number().digits(4));
-            t.setPin("1234");
+
+            if (randNr>0.7){
+                t.setPin(faker.number().digits(4));
+            }else{
+                t.setPin(t.getCardNumber().substring(0,4));
+            }
             t.setTries("0");
 
             System.out.println(t);

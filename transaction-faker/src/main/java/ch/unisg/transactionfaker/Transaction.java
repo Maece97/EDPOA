@@ -4,7 +4,8 @@ import lombok.Data;
 
 @Data
 public class Transaction {
-    
+
+    String id;
     String cardNumber;
     String pin;
     String country;

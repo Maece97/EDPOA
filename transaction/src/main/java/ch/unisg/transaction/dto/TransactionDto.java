@@ -20,8 +20,10 @@ public class TransactionDto {
     private String currency;
     private String cardNumber;
     private String country;
+    private String status;
+    private String exchangeRate;
 
-    public TransactionDto(String merchant,String merchantCategory,String country, double amount, String currency, String cardNumber, int pin) {
+    public TransactionDto(String merchant,String merchantCategory,String country, double amount, String currency, String cardNumber, int pin, String status, String exchangeRate) {
         this.id = UUID.randomUUID();
         this.timestamp = new Timestamp(System.currentTimeMillis());
         this.merchant = merchant;
@@ -31,6 +33,8 @@ public class TransactionDto {
         this.pin = pin;
         this.merchantCategory = merchantCategory;
         this.country = country;
+        this.status = status;
+        this.exchangeRate = exchangeRate;
     }
 
 
