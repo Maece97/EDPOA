@@ -75,7 +75,7 @@ public class PreprocessingTopology {
         KStream<String,TransactionWithExchangeRate> translated = withEr.mapValues(TransactionWithExchangeRate::exchangeMoney);
         translated.foreach((k,v)-> System.out.println("After: "+ v.getAmount()+" "+v.getCurrency()));
 
-        //TODO: joining status here
+        //joining status here
         translated = translated.selectKey((k,v)->v.getCardNumber());
         Joined<String,TransactionWithExchangeRate,String> statusJoinParams =
                 Joined.with(Serdes.String(), new TransactionWithErSerdes(),Serdes.String());

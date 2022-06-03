@@ -1,6 +1,7 @@
 package ch.unisg.exchangerates.controller;
 
 
+import ch.unisg.exchangerates.dto.NewExchangeRate;
 import ch.unisg.exchangerates.dto.Transaction;
 import lombok.RequiredArgsConstructor;
 import org.apache.kafka.clients.producer.*;
@@ -28,15 +29,9 @@ class UpdateExchangeRateRestController {
 
 
     @PostMapping("/update")
-    public void startMessageProcess(@RequestBody String body){
-        //TODO: Fix that nightmare of a code
-        System.out.println(body);
-        String [] splitted = body.split(",");
-        String rate = splitted[0].substring(13);
-        Double exchange_rate = Double.valueOf(rate);
-        System.out.println(rate);
-        String currency = splitted[1].substring(17,20);
-        System.out.println(currency);
+    public void startMessageProcess(@RequestBody NewExchangeRate exchangeRate){
+        String currency = exchangeRate.getCurrency();
+        double exchange_rate = exchangeRate.getRate();
 
         System.out.println("Creating producer");
 
