@@ -6,6 +6,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 import java.util.UUID;
 
@@ -45,22 +46,27 @@ public class TransactionFaker {
 
         for (int i = 0; i < fakeTransactions; i++) {
             Transaction t = new Transaction();
+            //determines whether or not the pin is correct (70% correct 30% wrong)
             double randNr = Math.random();
-            System.out.println(randNr);
+            //The app currently knows these currencies
+            String[] currencies = {"EUR", "CHF", "JPY"};
             //t.setAmount(faker.commerce().price(0, 1000));
             t.setId(UUID.randomUUID().toString());
-            t.setAmount("100");
+            t.setAmount(String.valueOf(faker.random().nextInt(1000)));
             t.setCardNumber(faker.finance().creditCard());
             t.setCountry(faker.address().country());
             //t.setCurrency(faker.currency().code());
-            t.setCurrency("EUR");
+            //Randomly select one of those three currencies
+            t.setCurrency(currencies[faker.random().nextInt(currencies.length)]);
             t.setMerchant(faker.company().name());
             t.setMerchantCategory(faker.company().industry());
 
-            if (randNr>0.7){
+            if (randNr > 0.7) {
+                //wrong pin
                 t.setPin(faker.number().digits(4));
-            }else{
-                t.setPin(t.getCardNumber().substring(0,4));
+            } else {
+                //correct pin
+                t.setPin(t.getCardNumber().substring(0, 4));
             }
             t.setTries("0");
 
