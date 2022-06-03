@@ -29,7 +29,7 @@ public class NotifyFraudDetectionDelegate implements JavaDelegate {
         String status = (String)delegateExecution.getVariable("status");
         String exchangeRate = (String) delegateExecution.getVariable("exchangeRate");
         //build DTO
-        TransactionDto transactionDto = new TransactionDto(merchant,merchantCategory,country,amount,currency,cardNumber,pin,status,exchangeRate);
+        TransactionDto transactionDto = new TransactionDto(merchant,merchantCategory,country,amount,currency,cardNumber,pin,status,exchangeRate,"accepted");
         //Send DTO to approved transactions via Kafka
         kafkaTemplate.send("approved-transactions", transactionDto);
     }

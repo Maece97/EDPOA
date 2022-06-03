@@ -2,6 +2,7 @@ package ch.unisg.preprocessing.topology;
 
 
 import ch.unisg.preprocessing.controller.ForwardTransactionRestController;
+import ch.unisg.preprocessing.controller.ResendTransactionController;
 import ch.unisg.preprocessing.dto.Transaction;
 import ch.unisg.preprocessing.dto.TransactionWithExchangeRate;
 import ch.unisg.preprocessing.dto.TransactionWithExchangeRateAndStatus;
@@ -24,8 +25,8 @@ public class PreprocessingTopology {
         //construct the topology
         StreamsBuilder builder = new StreamsBuilder();
         //forwarder
-        ForwardTransactionRestController forwardTransactionRestController = new ForwardTransactionRestController();
-
+        //ForwardTransactionRestController forwardTransactionRestController = new ForwardTransactionRestController();
+        ResendTransactionController resendTransactionController = new ResendTransactionController();
         // Incoming Transactions
         KStream<String, Transaction> incomingTransactionStream = 
                 builder.stream("incoming-transactions", Consumed.with(Serdes.String(), new TransactionSerdes()));
@@ -92,7 +93,7 @@ public class PreprocessingTopology {
             String amount = v.getAmount();
             //Camunda wants to have ints thats why we cut off after comma
             amount = amount.split("[.]")[0];
-            forwardTransactionRestController.forwardTransaction(v.getId(),amount,v.getPin(),v.getCardNumber(),v.getCountry(),
+            resendTransactionController.resendTransaction(v.getId(),amount,v.getPin(),v.getCardNumber(),v.getCountry(),
                     v.getMerchant(),v.getMerchantCategory(),v.getCurrency(),v.getTries(),v.getStatus(),v.getExchangeRate());
         });
 

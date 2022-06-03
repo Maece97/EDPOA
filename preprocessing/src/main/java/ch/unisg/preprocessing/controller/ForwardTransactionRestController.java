@@ -59,7 +59,7 @@ public class ForwardTransactionRestController {
             System.out.println(response.statusCode());
             System.out.println(response.body());
             if(response.statusCode()==204){
-                System.out.println("Resending the transaction was successful");
+                System.out.println("Forwarding the transaction was successful");
             }
 
         } catch (IOException e) {
