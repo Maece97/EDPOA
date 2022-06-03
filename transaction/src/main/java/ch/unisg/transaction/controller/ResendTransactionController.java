@@ -28,7 +28,7 @@ public class ResendTransactionController {
                 "    \"merchant\":{\"value\":\""+merchant+"\",\"type\":\"String\"},\n" +
                 "    \"merchantCategory\":{\""+merchantCategory+"\":\"Bitcoin\",\"type\":\"String\"},\n" +
                 "    \"currency\":{\"value\":\""+currency+"\",\"type\":\"String\"},\n" +
-                "    \"tries\":{\"value\":\""+tries+"\",\"type\":\"String\"}\n" +
+                "    \"tries\":{\"value\":\""+tries+"\",\"type\":\"String\"},\n" +
                 "    \"status\":{\"value\":\""+status+"\",\"type\":\"String\"},\n" +
                 "    \"exchangeRate\":{\"value\":\""+exchangeRate+"\",\"type\":\"String\"}\n" +
                 "\n" +
@@ -52,6 +52,8 @@ public class ResendTransactionController {
         //send
         try {
             HttpResponse response = httpClient.send(httpRequest,HttpResponse.BodyHandlers.ofString());
+            System.out.println(response.statusCode());
+            System.out.println(response.body());
             if(response.statusCode()==204){
                 System.out.println("Resending the transaction was successful");
             }
