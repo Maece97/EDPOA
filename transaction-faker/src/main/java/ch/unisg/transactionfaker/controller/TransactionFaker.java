@@ -47,13 +47,15 @@ public class TransactionFaker {
 
             // t.setAmount(faker.commerce().price(0, 1000));
             t.setAmount("100");
-            t.setCardNumber(faker.finance().creditCard());
+            //t.setCardNumber(faker.finance().creditCard());
+            t.setCardNumber("12345678");
             t.setCountry(faker.address().country());
             //t.setCurrency(faker.currency().code());
             t.setCurrency("EUR");
             t.setMerchant(faker.company().name());
             t.setMerchantCategory(faker.company().industry());
-            t.setPin(faker.number().digits(4));
+            //t.setPin(faker.number().digits(4));
+            t.setPin("1234");
             t.setTries("0");
 
             System.out.println(t);
