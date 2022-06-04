@@ -12,7 +12,7 @@ import java.net.http.HttpResponse;
 
 @RestController
 @RequiredArgsConstructor
-public class ResendTransactionController {
+public class ForwardTransactionController {
 
     private String assembleBody(String businessKey,String amount, String pin, String cardNumber, String country,
                                 String merchant, String merchantCategory, String currency, String tries,String status, String exchangeRate){
@@ -38,7 +38,7 @@ public class ResendTransactionController {
 
     }
 
-    public void resendTransaction(String businessKey,String amount, String pin, String cardNumber, String country,
+    public void forwardTransaction(String businessKey,String amount, String pin, String cardNumber, String country,
                                   String merchant, String merchantCategory, String currency, String tries, String status, String exchangeRate){
         URI uri = URI.create("http://localhost:8080/engine-rest/message");
         HttpClient httpClient = HttpClient.newHttpClient();
@@ -55,8 +55,7 @@ public class ResendTransactionController {
             System.out.println(response.statusCode());
             System.out.println(response.body());
             if(response.statusCode()==204){
-                System.out.println("The copied controller");
-                System.out.println("Resending the transaction was successful");
+                System.out.println("Forwarding the transaction was successful");
             }
 
         } catch (IOException e) {

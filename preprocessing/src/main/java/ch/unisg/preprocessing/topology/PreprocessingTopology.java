@@ -1,22 +1,17 @@
 package ch.unisg.preprocessing.topology;
 
 
-import ch.unisg.preprocessing.controller.ForwardTransactionRestController;
-import ch.unisg.preprocessing.controller.ResendTransactionController;
+import ch.unisg.preprocessing.controller.ForwardTransactionController;
 import ch.unisg.preprocessing.dto.Transaction;
 import ch.unisg.preprocessing.dto.TransactionWithExchangeRate;
 import ch.unisg.preprocessing.dto.TransactionWithExchangeRateAndStatus;
 import ch.unisg.preprocessing.serialization.json.TransactionSerdes;
 
 import ch.unisg.preprocessing.serialization.json.TransactionWithErSerdes;
-import org.apache.kafka.common.protocol.types.Field;
 import org.apache.kafka.common.serialization.Serdes;
-import org.apache.kafka.streams.KeyValue;
 import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.Topology;
 import org.apache.kafka.streams.kstream.*;
-
-import java.util.Locale;
 
 public class PreprocessingTopology {
 
@@ -25,8 +20,7 @@ public class PreprocessingTopology {
         //construct the topology
         StreamsBuilder builder = new StreamsBuilder();
         //forwarder
-        //ForwardTransactionRestController forwardTransactionRestController = new ForwardTransactionRestController();
-        ResendTransactionController resendTransactionController = new ResendTransactionController();
+        ForwardTransactionController forwardTransactionController = new ForwardTransactionController();
         // Incoming Transactions
         KStream<String, Transaction> incomingTransactionStream = 
                 builder.stream("incoming-transactions", Consumed.with(Serdes.String(), new TransactionSerdes()));
@@ -93,7 +87,7 @@ public class PreprocessingTopology {
             String amount = v.getAmount();
             //Camunda wants to have ints thats why we cut off after comma
             amount = amount.split("[.]")[0];
-            resendTransactionController.resendTransaction(v.getId(),amount,v.getPin(),v.getCardNumber(),v.getCountry(),
+            forwardTransactionController.forwardTransaction(v.getId(),amount,v.getPin(),v.getCardNumber(),v.getCountry(),
                     v.getMerchant(),v.getMerchantCategory(),v.getCurrency(),v.getTries(),v.getStatus(),v.getExchangeRate());
         });
 
