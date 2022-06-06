@@ -40,8 +40,8 @@ NEW 2. Send a fake transaction: localhost:8100/faker/transactions. Body is the a
 
 ```json
 {
- “cardNumber”:“123456”,
- “limit”:“1100”
+  "cardNumber": "123456",
+  "limit": "1100"
 }
 ```
 
@@ -52,18 +52,18 @@ Note: You can also update the limit of a card by sending the same request with a
 
 ```json
 {
- “messageName” : “Transaction”,
- “businessKey” : “93421e4e351351ddadadssd12e12",
- “processVariables” : {
- “amount” : {“value” : “100", “type”: “String”},
- “pin”: {“value”:“18234”, “type”:“String”},
- “cardNumber”: {“value”:“123456", “type”:“String”},
- “country”:{“value”:“GER”,“type”:“String”},
- “merchant”:{“value”:“Migros”,“type”:“String”},
- “merchantCategory”:{“value”:“Bitcoin”,“type”:“String”},
- “currency”:{“value”:“EUR”,“type”:“String”},
- “tries”:{“value”:“0”,“type”:“String”}
- }
+  "messageName": "Transaction",
+  "businessKey": "93421e4e351351ddadadssd12e12",
+  "processVariables": {
+    "amount": { "value": "100", "type": "String" },
+    "pin": { "value": "18234", "type": "String" },
+    "cardNumber": { "value": "123456", "type": "String" },
+    "country": { "value": "GER", "type": "String" },
+    "merchant": { "value": "Migros", "type": "String" },
+    "merchantCategory": { "value": "Bitcoin", "type": "String" },
+    "currency": { "value": "EUR", "type": "String" },
+    "tries": { "value": "0", "type": "String" }
+  }
 }
 ```
 
@@ -95,7 +95,7 @@ This section describes how our system implements the concepts covered in the fir
 
   - **Durable State**: The engine keeps track of the running process instances. This is - among others - necessary to be able to correlate incoming Kafka messages with the correct instance.
   - **Scheduling**: The process features a timeout functionality. If the authentication process takes too long, it is cancelled. This offers the chance to react accordingly - in our case, with a stateful retry.
-  - **Support for Human / Machine Collaboration**: The process includes a „user task” for re-entering the pin. Camunda provides a handy option here to provide a UI for interaction with the user.
+  - **Support for Human / Machine Collaboration**: The process includes a „user task" for re-entering the pin. Camunda provides a handy option here to provide a UI for interaction with the user.
   - **Tooling**: The Camunda modeller was used to create the BPMN diagram. Other than that, the Camunda libraries were used to connect to the services via the service tasks.
 
 ### Lecture 4:
