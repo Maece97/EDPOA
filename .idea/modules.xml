@@ -5,8 +5,11 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/EDPOA_2.iml" filepath="$PROJECT_DIR$/.idea/EDPOA_2.iml" />
       <module fileurl="file://$PROJECT_DIR$/blocking-rules/blocking-rules.iml" filepath="$PROJECT_DIR$/blocking-rules/blocking-rules.iml" />
       <module fileurl="file://$PROJECT_DIR$/card/card.iml" filepath="$PROJECT_DIR$/card/card.iml" />
+      <module fileurl="file://$PROJECT_DIR$/exchange-rates/exchange-rates.iml" filepath="$PROJECT_DIR$/exchange-rates/exchange-rates.iml" />
       <module fileurl="file://$PROJECT_DIR$/pin/pin.iml" filepath="$PROJECT_DIR$/pin/pin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/preprocessing/preprocessing.iml" filepath="$PROJECT_DIR$/preprocessing/preprocessing.iml" />
       <module fileurl="file://$PROJECT_DIR$/transaction/transaction.iml" filepath="$PROJECT_DIR$/transaction/transaction.iml" />
+      <module fileurl="file://$PROJECT_DIR$/transaction-faker/transaction-faker.iml" filepath="$PROJECT_DIR$/transaction-faker/transaction-faker.iml" />
     </modules>
   </component>
 </project>

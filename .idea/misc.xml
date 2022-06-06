@@ -7,6 +7,9 @@
         <option value="$PROJECT_DIR$/pin/pom.xml" />
         <option value="$PROJECT_DIR$/card/pom.xml" />
         <option value="$PROJECT_DIR$/blocking-rules/pom.xml" />
+        <option value="$PROJECT_DIR$/preprocessing/pom.xml" />
+        <option value="$PROJECT_DIR$/exchange-rates/pom.xml" />
+        <option value="$PROJECT_DIR$/transaction-faker/pom.xml" />
       </list>
     </option>
   </component>

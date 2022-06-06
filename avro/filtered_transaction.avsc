@@ -1,0 +1,35 @@
+{
+  "namespace": "ch.unisg.model",
+  "name": "FilteredTransaction",
+  "type": "record",
+  "fields": [
+    {
+      "name": "cardNumber",
+      "type": "string"
+    },
+    {
+      "name": "amount",
+      "type": "string"
+    },
+    {
+      "name": "currency",
+      "type": "string"
+    },
+    {
+      "name": "country",
+      "type": "string"
+    },
+    {
+      "name": "merchant",
+      "type": "string"
+    },
+    {
+      "name": "merchantCategory",
+      "type": "string"
+    },
+    {
+      "name": "tries",
+      "type": "string"
+    }
+  ]
+}
