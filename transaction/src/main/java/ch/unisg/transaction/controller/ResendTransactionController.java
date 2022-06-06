@@ -15,7 +15,7 @@ import java.net.http.HttpResponse;
 public class ResendTransactionController {
 
     private String assembleBody(String businessKey,String amount, String pin, String cardNumber, String country,
-                                String merchant, String merchantCategory, String currency, String tries){
+                                String merchant, String merchantCategory, String currency, String tries,String status, String exchangeRate){
         String body = "{\n" +
                 "  \"messageName\" : \"Transaction\",\n" +
                 "  \"businessKey\" : \""+businessKey+"\",\n" +
@@ -28,7 +28,9 @@ public class ResendTransactionController {
                 "    \"merchant\":{\"value\":\""+merchant+"\",\"type\":\"String\"},\n" +
                 "    \"merchantCategory\":{\""+merchantCategory+"\":\"Bitcoin\",\"type\":\"String\"},\n" +
                 "    \"currency\":{\"value\":\""+currency+"\",\"type\":\"String\"},\n" +
-                "    \"tries\":{\"value\":\""+tries+"\",\"type\":\"String\"}\n" +
+                "    \"tries\":{\"value\":\""+tries+"\",\"type\":\"String\"},\n" +
+                "    \"status\":{\"value\":\""+status+"\",\"type\":\"String\"},\n" +
+                "    \"exchangeRate\":{\"value\":\""+exchangeRate+"\",\"type\":\"String\"}\n" +
                 "\n" +
                 "  }\n" +
                 "}";
@@ -37,19 +39,21 @@ public class ResendTransactionController {
     }
 
     public void resendTransaction(String businessKey,String amount, String pin, String cardNumber, String country,
-                                  String merchant, String merchantCategory, String currency, String tries){
+                                  String merchant, String merchantCategory, String currency, String tries, String status, String exchangeRate){
         URI uri = URI.create("http://localhost:8080/engine-rest/message");
         HttpClient httpClient = HttpClient.newHttpClient();
         HttpRequest httpRequest = HttpRequest.newBuilder()
                 .uri(uri)
                 .POST(HttpRequest.BodyPublishers.ofString(this.assembleBody(businessKey,amount,pin,cardNumber,country,
-                        merchant,merchantCategory,currency,tries) ))
+                        merchant,merchantCategory,currency,tries,status,exchangeRate) ))
                 .header(HttpHeaders.CONTENT_TYPE,"application/json")
                 .build();
 
         //send
         try {
             HttpResponse response = httpClient.send(httpRequest,HttpResponse.BodyHandlers.ofString());
+            System.out.println(response.statusCode());
+            System.out.println(response.body());
             if(response.statusCode()==204){
                 System.out.println("Resending the transaction was successful");
             }

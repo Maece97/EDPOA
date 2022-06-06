@@ -1,0 +1,39 @@
+{
+  "namespace": "ch.unisg.model",
+  "name": "Transaction",
+  "type": "record",
+  "fields": [
+    {
+      "name": "cardNumber",
+      "type": "string"
+    },
+    {
+      "name": "amount",
+      "type": "string"
+    },
+    {
+      "name": "currency",
+      "type": "string"
+    },
+    {
+      "name": "country",
+      "type": "string"
+    },
+    {
+      "name": "merchant",
+      "type": "string"
+    },
+    {
+      "name": "merchantCategory",
+      "type": "string"
+    },
+    {
+      "name": "pin",
+      "type": "string"
+    },
+    {
+      "name": "tries",
+      "type": "string"
+    }
+  ]
+}

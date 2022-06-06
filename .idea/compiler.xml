@@ -7,8 +7,11 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="blocking-rules" />
         <module name="pin" />
+        <module name="preprocessing" />
+        <module name="exchange-rates" />
+        <module name="transaction-faker" />
+        <module name="blocking-rules" />
         <module name="transaction" />
         <module name="card" />
       </profile>
@@ -16,9 +19,12 @@
     <bytecodeTargetLevel>
       <module name="blocking-rules" target="11" />
       <module name="card" target="11" />
+      <module name="exchange-rates" target="11" />
       <module name="pin" target="11" />
       <module name="pin_backup" target="11" />
+      <module name="preprocessing" target="11" />
       <module name="transaction" target="11" />
+      <module name="transaction-faker" target="11" />
       <module name="wrapper" target="1.5" />
     </bytecodeTargetLevel>
   </component>
@@ -26,9 +32,12 @@
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="blocking-rules" options="-parameters" />
       <module name="card" options="-parameters" />
+      <module name="exchange-rates" options="-parameters" />
       <module name="pin" options="-parameters" />
       <module name="pin_backup" options="-parameters" />
+      <module name="preprocessing" options="" />
       <module name="transaction" options="" />
+      <module name="transaction-faker" options="-parameters" />
     </option>
   </component>
 </project>
