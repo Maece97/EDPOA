@@ -6,7 +6,7 @@ TODO JONAS Update diagram and text
 
 Our system is a credit card transaction processing system that both processes transactions coming in and detects fraudulent transactions. Below you will find a basic system overview. The services highlighted in blue make up the Transaction workflow, while the services highlighted in green make up the Fraud Detection workflow. Blue arrows indicate synchronous communication, and black arrows asynchronous communication:
 
-![alt text](doc/diagrams/System%20Overview.png)
+![System Overview - Diagram](doc/diagrams/System%20Overview.png)
 
 ## Service Descriptions
 
@@ -125,9 +125,9 @@ This section describes how our system implements the concepts covered in the fir
 
 - **Event Processing Design Patterns**
   - **Single-Event Processing**: The Transaction Postprocessing service employs this pattern when it filters the content of the transactions before passing them on to the Fraud Detection workflow. 
-  - **Processing with Local State**: TODO Kris
+  - **Processing with Local State**: The Fraud Preprocessing service follows this pattern to enable windowed aggregations of the transaction stream
   - **Stream-Table Join**: TODO Jonas
-- TODO Kris AVRO IS IT IN THIS LECTURE? - check their topology stuff
+- **Schema Registry-aware Avro Serdes**  TODO Kris check their topology stuff
 
 ### Lecture 9
 
@@ -149,7 +149,9 @@ You can find our ADRs [here](doc/architecture/decisions/).
 
 TODO Jonas ADR on caching 
 
-TODO Kris ADR on window types
+TODO Kris ADR on window types - link in topologies file
+
+TODO Kris ADR on new service granularities 
 
 ## Diagrams
 
