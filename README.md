@@ -1,16 +1,48 @@
 # EDPOA
 
 ## General Description
+@Kris: Not too sure if thats good pls read over it 
 
-TODO JONAS Update diagram and text
+Our system is a credit card transaction processing system that both processes transactions coming in and detects fraudulent transactions.
+It is composed from two major parts. The transaction workflow (blue) is responsible for rejecting or accepting the transaction
+based on "hard-coded" criteria. To be able to respond to the customer quickly, this process is time-sensitive.
+The fraud detection workflow (green) does the actual fraud detection. This is done with the help of
+machine learning and happens "behind the scenes". Therefore it is not time sensitive as it does not require a quick response to the user.
+Below you will find a basic system overview.
 
-Our system is a credit card transaction processing system that both processes transactions coming in and detects fraudulent transactions. Below you will find a basic system overview. The services highlighted in blue make up the Transaction workflow, while the services highlighted in green make up the Fraud Detection workflow. Blue arrows indicate synchronous communication, and black arrows asynchronous communication:
-
-![System Overview - Diagram](doc/diagrams/System%20Overview.png)
+![System Overview - Diagram](doc/diagrams/system_diagram.png)
 
 ## Service Descriptions
+**Transaction Preprocessing:**
+The main entry point for all transactions into our system.
+It enriches the transaction with the card status and standardizes amount to USD
 
-TODO JONAS 1-2 sentences about each service
+**Card Service:** Keeps track of each cards limit and status and encapsulates getting
+updates from the outside world and distribute them to the services working with this data.
+
+**Exchange Rates Services:** Is responsible for updating the
+exchange rates used in the Preprocessing service to standardize the amount.
+For doing so, it is periodically updated by querying an external API.
+
+**Transaction Service:** Represents the first instance of our transaction approval
+process. It does all sorts of rule based checks on the transaction (pin correct, limit exceeded,
+predefined blocking rule violated )
+
+**Pin Service:** Checks if the pin is correct and return the result.
+
+**Blocking rules service:** Keeps a set of predefined rules for blocking a transaction.
+It also checks if one of those rules is violated and returns the result.
+
+**Transaction Postprocessing Service:** Filters the fields which are not needed for the actual
+fraud detection system but for the rule based decisions.
+
+**Fraud Preprocessing Service:** TODO Kris
+
+**Fraud Detection Service:** TODO Kris
+
+**Fraud Investigation Service:**  TODO Kris
+
+**Fraud Dispute Service:** TODO Kris
 ## Running the system
 
 TODO Marcel update this 
@@ -126,15 +158,20 @@ This section describes how our system implements the concepts covered in the fir
 - **Event Processing Design Patterns**
   - **Single-Event Processing**: The Transaction Postprocessing service employs this pattern when it filters the content of the transactions before passing them on to the Fraud Detection workflow. 
   - **Processing with Local State**: The Fraud Preprocessing service follows this pattern to enable windowed aggregations of the transaction stream
-  - **Stream-Table Join**: TODO Jonas
-- **Schema Registry-aware Avro Serdes**: Our system uses Schema Registry-aware Avro Serdes in order to share the Transaction class which is used by multiple services within out system. The usage of Avro and its trade-offs are discussed further within the [topology description](doc/topologies.md).
-
+  - **Processing with External Lookup (Stream-Table Join)**: The Transaction Preprocessing Service follows this pattern by including
+    exchange rates from a third party API as well as the card status from our own card service. [ADR: Use Caching in Transaction Preprocessing](doc/architecture/decisions/0009-use-caching-in-preprocessing.md)
+- **Schema Registry-aware Avro Serdes**: Our system uses Schema Registry-aware Avro Serdes in order to share the Transaction class which is used by multiple services within our system. The usage of Avro and its trade-offs are discussed further within the [topology description](doc/topologies.md). We thereby implement the Event (De-)Serializer pattern and the Data Contract pattern.
+- **Event Processor Types**
+  - **Event Router**: This processor is implemented in the Transaction Preprocessing service where we select the transactions from our cards.
+  - **Content Filter**: Is implemented in the Transaction Postprocessing where we filter unneccessary fields.
+  - **Event Translator**: Is used in the Transaction Preprocessing where we standardize the amount to USD.
 ### Lecture 9
 
 - **KStreams, KTables, Global KTables**: See [topology description](doc/topologies.md).
 - **Interactive queries**: See [topology description](doc/topologies.md).
 
-### Lecture 9
+@Kris: the stuff below is lecture 10 no?
+### Lecture 10
 
 - **Time semantics**: Our transaction event has a timestamp embedded within it. This serves as the event time. The event time is in fact extracted using a custom timestamp extractor in the fraud preprocessing topology. For more information see [topology description](doc/topologies.md).
 - **Windowed aggregation**: See [topology description](doc/topologies.md).
@@ -147,7 +184,6 @@ See [topology description](doc/topologies.md)
 
 You can find our ADRs [here](doc/architecture/decisions/).
 
-TODO Jonas ADR on caching 
 
 TODO Kris ADR on new service granularities 
 
@@ -160,7 +196,6 @@ TODO Kris ADR on new service granularities
 
 TODO Kris Add all topologies etc to list - at very end
 
-TODO Jonas update BPMN
 
 ## Results
 
@@ -191,12 +226,14 @@ This section will outline the learnings we have gained from designing and implem
 - Differentiating between commands and events was more difficult than expected
 
 ### Assignment 2
-
+@Kris: is partitioning somwhere in here? if yes just delete this comment :D
 - Avro:
   - Avro gives us a good way to share ObjectClasses between services with one single place of truth.
   - The first option is to share this TransferObjectClass is within the events which adds unnessesary size to the event, which is not acceptable for us as we will have a high volume of events.
   - The other option is to store the TransferOnjects in a Repository. This also means we need a repository to store this TransferObject and act as the single place of truth. Which means we add a service which other services depend on and can fail if the repository service is not reachable. This also adds complexity in deployments, as the Avro schemas need to be in sync on the repository and within the code, as we still wan't to use git for version managment.
   - We think the overhead and complexity which Avro adds is just not worth it. Overall, we could achive almost thesame with a simple shared library which contains the DTO.
+- Global K-Tables:
+  - We planned to implement the exchange rates cache with a Global K-Table and are still convinced that this is the right choice. However, it does not provide the necessary interface to seemlessly perform joins without further ado. Therefore, it has been replaced by a "normal" K-Table in our implementation.
 - Kafka Streams:
   - Kafka streams enable fast possibilties to process events. But this abstraction layer also comes at a cost, as we lose some control over the underlying functionallity.
   - In our experience it made it hard to debug. It took a while until we descovered how to enable logging, and in the standard logging configuration the logs would spam every single small detail. Which was not helpful at all.
@@ -206,16 +243,13 @@ reflections and lessons learned:
   - Stream Processing is a great way to alter events in real time and gain insights in real time. It seems to be a great way to work with events. But I'm still not convinced that we need a library like kafka-streams to do this.
 - General reflections or insights:
   - Stream Processing is a great way to alter events in real time and gain insights in real time. It seems to be a great way to work with events. But I'm still not convinced that we need a library like kafka-streams to do this. Using Kafka-streams adds a framework which is kinda irreplaceable without rewriting most part of the service. But overall, what we doing in stream processing is mostly just simple Object manipulations and storing some data in a Map like structure when using tables. I know, something super simple like Object manipulation can add a lot of boilerplate in strict languages like Java. Hence, the question arrises if Java is the right language for that task. Other programming languages like JavaScript excel in Object manipulation and have a lot of build in support for that. Therefore, I'm sure in a language like this we could archive the same result with probably even less lines than with kafka-streams. Without adding a huge library and abstraction on top.
-
-TODO Jonas add your reflections
-
+  
 ## Editorial Notes
 
 In this section, we explain some things and decisions that might not be clear from the other sections or documents.
 
 - The Card service only contains the card limit in our implementation. In practice, this service should also contain more information on the card and more business logic about how that information can change. For example, it should contain the status of the card (open, closed, etc.) and business logic on how these can change.
-
-TODO Jonas
+- We send the transactions from the Transaction Preprocessing Service to the Transaction service via a HTTP request. This is done for compatibility reasons with our already existing system from assignment 1. We are aware that this introduces runtime coupling between those two services. In the first round of refactoring, we would replace this with Kafka communication. Thereby, we reach better responsiveness which is a crucial non functional property in the first part of our system.
 
 ## Responsibilities
 
@@ -261,12 +295,12 @@ TODO Jonas
     - Discussed the system structure and its fit with the course
     - Wrote the documentation for the Transaction Preprocessing topology and his reflections
     - Reviewed the documentation and the ADRs
-    - Finalsed documentation
+    - Finalised documentation
   - Kristófer:
     - Collected topics and concepts relevant to our project which need to be considered and might need an ADR
     - Discussed the system structure and its fit with the course
     - Wrote the documentation for the Fraud Preprocessing topology and his reflections
-    - Finalsed documentation
+    - Finalised documentation
 
 - Implementation:
   - Marcel:

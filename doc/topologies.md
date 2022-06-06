@@ -1,9 +1,23 @@
 # Topology Descriptions
 
 ## Transaction Preprocessing Topology
+![Transaction Preprocessing Topology - Diagram](diagrams/topologies/transaction_preprocessing_topology_diagram.png)
+### Topology description
+- **Transactions from External**: All transactions going into our system from outside arrive here. Since the fraud detection is based on past transactions with the same card, they need to be in order. That is why we use a **K-Stream** here.
+- **Card Status**: We store the status of every single card used in a transaction. Therefore, the keyspace can grow very large. As a consequence, we implemented this with a **K-Table**. As the order of the cards does not really matter, time synchronized processing is not a decisive factor.
+- **Exchange Rate**: We need to store the exchange rate to USD for every currency we accept. As the number of currencies is inherently limited, so is the keyspace. Therefore, a **Global K-Table** is used. Other than that, the exchange rates should be globally replicated. The order of the rates does not really matter, time synchronized processing is not a decisive factor.
+- **Event Router**: At this point, we filter out transactions coming from cards not issued by us by leveraging an **Event Router**. We also could have used an event filter, but conciously decided for a router as we probably want to analyse the "foreign" transactions in some way. Therefore, we do not want to discard them.
+- **Map**: We join the transaction with the card status based on the card number. Therefore, we rekey the transaction here.
+- **Join**: We enrich the transaction with the card status, as we want to be able to reject transactions from an inactive card at the beginning of the approval process to save unnecessary computing.
+- **Map**: We join the transaction with the exchange rate status based on the currency code. Therefore, we rekey the transaction here.
+- **Join**: The transaction is enriched with the current exchange rate from the respective currency to USD.
+- **Translate Amount in USD**: Technically, the incoming transaction could use every potential currency. For our fraud detection model, it would make sense to standardize that (comparability). Therefore, we compute the corresponding amount in USD here. The **Event Translation** processor type is implemented here.
 
-TODO JONAS - Remember to embed the image in text
+###Other considerations
+- We conciously do not use Avro here. If we wanted to do this, the incoming transactions from thrid parties would also need to be in the Avro format. Even thought we could share the Avro registry with third party clients and they could implement their systems to use Avro and our Avro schemas, we think this is not a good approach for interoperability. Therefore, we decided we want to use a more commonly used and open format  JSON. We still have designed a contract how incoming JSON objects have to look like.
 
+### Trade-Offs
+- The respective trade-offs introduced by the usage of (Global) K-Tables are discussed in a [separate ADR.](./architecture/decisions/0009-use-caching-in-preprocessing.md)
 ## Transaction Postprocessing Topology
 
 ![Transaction Postprocessing Topology - Diagram](diagrams/topologies/transaction_postprocessing_topology_diagram.png)
@@ -14,7 +28,7 @@ TODO JONAS - Remember to embed the image in text
 
 ### Other considerations
 - We are using **Avro** here to have a shared understand of the Transaction Object between the different Services.
-  - The Avro schemas are stored in a avro repository.
+  - The Avro schemas are stored in an Avro repository.
 ## Fraud Preprocessing Topology
 
 ![Fraud Preprocessing Topology - Diagram](diagrams/topologies/fraud_preprocessing_topology_diagram.png)
