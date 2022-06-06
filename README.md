@@ -2,12 +2,18 @@
 
 ## General Description
 
+TODO JONAS Update diagram and text
+
 Our system is a credit card transaction processing system that both processes transactions coming in and detects fraudulent transactions. Below you will find a basic system overview. The services highlighted in blue make up the Transaction workflow, while the services highlighted in green make up the Fraud Detection workflow. Blue arrows indicate synchronous communication, and black arrows asynchronous communication:
 
 ![alt text](doc/diagrams/System%20Overview.png)
 
+## Service Descriptions
+
+TODO JONAS 1-2 sentences about each service
 ## Running the system
 
+TODO Marcel update this 
 ### Services
 
 | Name                | Port |
@@ -74,6 +80,8 @@ Kafka response to the correct service.
 
 This section describes how our system implements the concepts covered in the first six lectures of the course. For a discussion of the architectural decisions surrounding the adoption of these concepts and their trade-offs, please refer to our architectural decision records (ADRs). Note that some relevant ADRs are linked where they directly address the concepts discussed here. However, some ADRs are not linked below, but all can be found [here](doc/architecture/decisions/).
 
+### Assignment 1
+
 ### Lecture 1
 
 - **Event-driven Architecture** [ADR: Event-driven Microservices Architecture](doc/architecture/decisions/0002-event-driven-microservices-architecture.md).
@@ -111,9 +119,37 @@ This section describes how our system implements the concepts covered in the fir
   - **Parallel Saga**: The Transaction workflow would fall under the Parallel Saga pattern due to its characteristics (asynchronous communication, eventual consistency, orchestrated coordination). However, as there is not really a distributed transaction that requires actions to be reversed, this does not have a large impact on the implementation.
   - **Anthology Saga**: The Fraud Detection workflow would fall under the Anthology Saga pattern due to its characteristics (asynchronous communication, eventual consistency, choreographed coordination). However, the same applies here. As there is not really a distributed transaction that requires actions to be reversed, this does not have a large impact on the implementation.
 
+### Assignment 2
+
+### Lecture 8
+
+- **Event Processing Design Patterns**
+  - **Single-Event Processing**: The Transaction Postprocessing service employs this pattern when it filters the content of the transactions before passing them on to the Fraud Detection workflow. 
+  - **Processing with Local State**: TODO Kris
+  - **Stream-Table Join**: TODO Jonas
+- TODO Kris AVRO IS IT IN THIS LECTURE? - check their topology stuff
+
+### Lecture 9
+
+- **KStreams, KTables, Global KTables**: See [topology description](doc/topologies.md).
+- **Interactive queries**: See [topology description](doc/topologies.md).
+
+### Lecture 9
+
+- **Time semantics**: Our transaction event has a timestamp embedded within it. This serves as the event time. The event time is in fact extracted using a custom timestamp extractor in the fraud preprocessing topology. For more information see [topology description](doc/topologies.md).
+- **Windowed aggregation**: See [topology description](doc/topologies.md).
+
+## Topologies
+
+See [topology description](doc/topologies.md)
+
 ## Architectural Decisions and Trade-Offs
 
 You can find our ADRs [here](doc/architecture/decisions/).
+
+TODO Jonas ADR on caching 
+
+TODO Kris ADR on window types
 
 ## Diagrams
 
@@ -121,6 +157,10 @@ You can find our ADRs [here](doc/architecture/decisions/).
 - [Bounded Contexts Diagram](doc/diagrams/Bounded%20Contexts%20-%20EDPO.pdf)
 - [System Overview](doc/diagrams/System%20Overview.png)
 - [Transaction Workflow BPMN](doc/diagrams/Transaction%20Workflow%20BPMN.png)
+
+TODO Kris Add all topologies etc to list - at very end
+
+TODO Jonas update BPMN
 
 ## Results
 
@@ -135,6 +175,9 @@ For our system, we decided to investigate two aspects of Kafka and how they can 
 
 ## Reflections
 
+
+ ### Assignment 1
+
 This section will outline the learnings we have gained from designing and implementing our system.
 
 - What we found out from working with Kafka is that it is very easy to set up, but you have to be careful to set it up right so that you don't experience unexpected consequences such as data loss. For example, you should have enough partitions in order to be able to scale your number of consumers to keep up with producers that produce faster than a single consumer/thread can keep up with. Moreover, you need to carefully read through the default configuration values before moving into production. Failing to do so can lead to the situation described in our Results section where old messages were ignored by a new consumer - a behaviour you wouldn't expect as the default one.
@@ -147,15 +190,29 @@ This section will outline the learnings we have gained from designing and implem
 - The transaction service implement some fairly complex logic with respect to the pin validation procedure. This is mainly because this part grew over time, starting from simply checking if the amount is high enough that a pin is required or not. An other option would have been to put this logic in the pin service, to ensure a clear separation of concerns and respect service boundaries. It would be worth considering this option for future refactoring.
 - Differentiating between commands and events was more difficult than expected
 
+### Assignment 2
+
+TODO Kris Reflect on partitions 
+
+TODO Jonas add your reflections
+
+TODO Kris add your and Marcel's reflections
+
 ## Editorial Notes
 
 In this section, we explain some things and decisions that might not be clear from the other sections or documents.
 
 - The Card service only contains the card limit in our implementation. In practice, this service should also contain more information on the card and more business logic about how that information can change. For example, it should contain the status of the card (open, closed, etc.) and business logic on how these can change.
 
+TODO Jonas
+
+TODO Kris maybe 
+
 ## Responsibilities
 
-Note: we believe that the work was evenly distributed and that each of the group members had about the same workload.
+**Note: we believe that the work was evenly distributed and that each of the group members had about the same workload.**
+
+### Assignment 1
 
 - Architecture & Theory
 
@@ -181,3 +238,34 @@ Note: we believe that the work was evenly distributed and that each of the group
     - Wrote the code for the final Transaction Workflow, including all Spring services, as well as the design of the workflow in BPMN and its implementation in Camunda
   - Kristófer:
     - Wrote the initial version of the Transaction service before it was converted to the Camunda implementation
+
+### Assignment 2
+
+- Architecture & Theory
+
+  - Marcel:
+    - Discussed the system structure and its fit with the course concepts
+    - Wrote the documentation for the Transaction Postprocessing topology and his reflections
+    - Reviewed all the documentation and the ADRs
+  - Jonas:
+    - Collected topics and concepts relevant to our project which need to be considered and might need an ADR
+    - Discussed the system structure and its fit with the course
+    - Wrote the documentation for the Transaction Preprocessing topology and his reflections
+    - Reviewed the documentation and the ADRs
+    - Finalsed documentation
+  - Kristófer:
+    - Collected topics and concepts relevant to our project which need to be considered and might need an ADR
+    - Discussed the system structure and its fit with the course
+    - Wrote the documentation for the Fraud Preprocessing topology and his reflections
+    - Finalsed documentation
+
+- Implementation:
+  - Marcel:
+    - Set up the Avro registry and everything surrounding the usage of Avro
+    - Integrated the microservices and tested the system flow
+    - Wrote the code for the Transaction Postprocessing and the Transaction Faker services
+  - Jonas:
+    - Wrote the code for the Transaction Preprocessing service  
+    - Integrated the Transaction Preprocessing service with the Transaction service (Camunda workflow)
+  - Kristófer:
+    - Wrote the code for the Fraud Preprocessing service 
