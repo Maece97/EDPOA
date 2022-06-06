@@ -31,11 +31,10 @@ TODO THE KEY IS NOT EMPTY, WHAT IS IT?
 
 ### Trade-Offs
 
-TODO KRIS - Remember trade-offs -> window type - Remember to embed the image in text
-
-Trade-off: Partition stuff on the slides
-
-Also look at the considerations on the slides
+- **Considerations due to Processing with Local State design pattern**:
+  - **Memory usage**: Memory usage is an important consideration for our use case since the service might have to cache a large number of transactions in order to do the aggregations. This is something that would have to be considered in production based on statistics on the number of transactions coming into the system.
+  - **Persistence**: Persistence is also an important consideration here. There could be the case where a service goes down and therefore loses up to 65 seconds of local data. However, we do not see this as being a major issue since the probability of the service going down and that causing fraud to go undetected is very low (given the relatively small amount of fraudulent transactions as a proportion of total transactions). This probability is further reduced by the fact that the fraud detection would work on the transaction stream as well, so the fraud might be detected regardless.
+- **Window Type**: We chose the Tumbling window type for our windowed aggregations here. The drawback of this is that we can potentially have 5 transactions occur within 60 seconds but fall within two separate windows and thus not be counted. However, this is outweighted by the larger drawbacks of the other window types. A hopping window does not make sense from a domain perspective as we do not want transactions to appear in two separate windows. This could cause an occurance of 5 transactions arriving within a short period of time to be counted as two occurances due to overlapping windows. We believe this to be worse for the fraud detection than the drawback of the tumbling window. The session window does also not make sense from a domain perspective since the window could become abitrarily long given that a card has a consistent stream of transactions. Therefore, this type does not match our needs. Lastly, the semantics of the sliding join and aggregation windows do not match our domain problem.  
 
 ## Avro Discussion
 

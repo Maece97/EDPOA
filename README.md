@@ -127,7 +127,7 @@ This section describes how our system implements the concepts covered in the fir
   - **Single-Event Processing**: The Transaction Postprocessing service employs this pattern when it filters the content of the transactions before passing them on to the Fraud Detection workflow. 
   - **Processing with Local State**: The Fraud Preprocessing service follows this pattern to enable windowed aggregations of the transaction stream
   - **Stream-Table Join**: TODO Jonas
-- **Schema Registry-aware Avro Serdes**  TODO Kris check their topology stuff
+- **Schema Registry-aware Avro Serdes**: Our system uses Schema Registry-aware Avro Serdes in order to share the Transaction class which is used by multiple services within out system. The usage of Avro and its trade-offs are discussed further within the [topology description](doc/topologies.md).
 
 ### Lecture 9
 
@@ -148,8 +148,6 @@ See [topology description](doc/topologies.md)
 You can find our ADRs [here](doc/architecture/decisions/).
 
 TODO Jonas ADR on caching 
-
-TODO Kris ADR on window types - link in topologies file
 
 TODO Kris ADR on new service granularities 
 
@@ -207,7 +205,7 @@ This section will outline the learnings we have gained from designing and implem
 reflections and lessons learned:
   - Stream Processing is a great way to alter events in real time and gain insights in real time. It seems to be a great way to work with events. But I'm still not convinced that we need a library like kafka-streams to do this.
 - General reflections or insights:
-  - Stream Processing is a great way to alter events in real time and gain insights in real time. It seems to be a great way to work with events. But I'm still not convinced that we need a library like kafka-streams to do this.
+  - Stream Processing is a great way to alter events in real time and gain insights in real time. It seems to be a great way to work with events. But I'm still not convinced that we need a library like kafka-streams to do this. Using Kafka-streams adds a framework which is kinda irreplaceable without rewriting most part of the service. But overall, what we doing in stream processing is mostly just simple Object manipulations and storing some data in a Map like structure when using tables. I know, something super simple like Object manipulation can add a lot of boilerplate in strict languages like Java. Hence, the question arrises if Java is the right language for that task. Other programming languages like JavaScript excel in Object manipulation and have a lot of build in support for that. Therefore, I'm sure in a language like this we could archive the same result with probably even less lines than with kafka-streams. Without adding a huge library and abstraction on top.
 
 TODO Jonas add your reflections
 
@@ -218,8 +216,6 @@ In this section, we explain some things and decisions that might not be clear fr
 - The Card service only contains the card limit in our implementation. In practice, this service should also contain more information on the card and more business logic about how that information can change. For example, it should contain the status of the card (open, closed, etc.) and business logic on how these can change.
 
 TODO Jonas
-
-TODO Kris maybe 
 
 ## Responsibilities
 
