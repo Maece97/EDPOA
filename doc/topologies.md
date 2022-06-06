@@ -15,6 +15,8 @@
 
 ###Other considerations
 - We conciously do not use Avro here. If we wanted to do this, the incoming transactions from thrid parties would also need to be in the Avro format. Even thought we could share the Avro registry with third party clients and they could implement their systems to use Avro and our Avro schemas, we think this is not a good approach for interoperability. Therefore, we decided we want to use a more commonly used and open format  JSON. We still have designed a contract how incoming JSON objects have to look like.
+- As we use the actual and up-to-date exchange rates from an external API, translating the amount is a stateful action.
+- @Kris: discuss stateful/less stuff for the other topologies as well if relevant?
 
 ### Trade-Offs
 - The respective trade-offs introduced by the usage of (Global) K-Tables are discussed in a [separate ADR.](./architecture/decisions/0009-use-caching-in-preprocessing.md)
