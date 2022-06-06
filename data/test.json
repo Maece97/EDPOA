@@ -1,0 +1,3 @@
+{ "cardNumber": "1234", "amount": 12, "currency": "CHF" }
+{ "cardNumber": "8234", "amount": 15, "currency": "CHF" }
+{ "cardNumber": "4234", "amount": 18, "currency": "EUR" }

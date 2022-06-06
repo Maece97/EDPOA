@@ -1,0 +1,7 @@
+server:
+  port: 8104
+
+kafka:
+  bootstrap-address: localhost:29092
+  group-id: randomGroupId
+  trusted-packages: ch.unisg.transaction.dto

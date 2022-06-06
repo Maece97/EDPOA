@@ -41,5 +41,5 @@ public class KafkaTopicConfig {
 
     //forward transaction
     @Bean
-    public NewTopic sendTransactionTopic(){return new NewTopic("approved-transactions",1,(short) 1);};
+    public NewTopic sendTransactionTopic(){return new NewTopic("transaction-postprocessing",1,(short) 1);};
 }

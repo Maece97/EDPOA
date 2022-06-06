@@ -10,7 +10,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 import ch.unisg.model.domain.Transaction;
 import ch.unisg.model.dto.Message;
-import ch.unisg.model.dto.TransactionTransferObject;
 
 @SpringBootApplication
 @EnableScheduling
@@ -21,14 +20,15 @@ public class ModelApplication {
 	}
 
 	@Bean
-	public Consumer<TransactionTransferObject> transaction() {
+	public Consumer<FilteredTransaction> transaction() {
+		System.out.println("-----> New transaction. Checking if it's fraud...");
 		return this::acceptOrDecline;
 	}
 
 	@Autowired
     private KafkaProducer kafkaProducer;
 
-	public void acceptOrDecline (TransactionTransferObject message){
+	public void acceptOrDecline (FilteredTransaction message){
 		Transaction transaction = new Transaction(message, kafkaProducer);
 		transaction.acceptOrDecline();
 	}
