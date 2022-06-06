@@ -194,11 +194,22 @@ This section will outline the learnings we have gained from designing and implem
 
 ### Assignment 2
 
-TODO Kris Reflect on partitions 
+- Avro:
+  - Avro gives us a good way to share ObjectClasses between services with one single place of truth.
+  - The first option is to share this TransferObjectClass is within the events which adds unnessesary size to the event, which is not acceptable for us as we will have a high volume of events.
+  - The other option is to store the TransferOnjects in a Repository. This also means we need a repository to store this TransferObject and act as the single place of truth. Which means we add a service which other services depend on and can fail if the repository service is not reachable. This also adds complexity in deployments, as the Avro schemas need to be in sync on the repository and within the code, as we still wan't to use git for version managment.
+  - We think the overhead and complexity which Avro adds is just not worth it. Overall, we could achive almost thesame with a simple shared library which contains the DTO.
+- Kafka Streams:
+  - Kafka streams enable fast possibilties to process events. But this abstraction layer also comes at a cost, as we lose some control over the underlying functionallity.
+  - In our experience it made it hard to debug. It took a while until we descovered how to enable logging, and in the standard logging configuration the logs would spam every single small detail. Which was not helpful at all.
+  - Versions of kafka stream older than 3.2.0 don't include arm binaries and therefore, don't support MacBooks with the M1 chip (Except when runnning the jar in Roseta [Hello IntelliJ Users :D]). M1 Macbooks are around for more than 1.5 years, and in my experience all other librarys I normaly work with updated their binaries within weeks or a few months. Kafka Streams 3.2.0 was recently release in May 2022, which makes us wonder about their generall update frequency and if this is acceptable for a library which is used at the core of the application. Switching to a different library or dropping it completly would mean rewriting almost every aspect of the event-processing services.
+  - For people who are not used to a more functional programming approche it is a bit of a mindset change first, but this was not a to big of a challenge for as, as we are all experienced developer.
+reflections and lessons learned:
+  - Stream Processing is a great way to alter events in real time and gain insights in real time. It seems to be a great way to work with events. But I'm still not convinced that we need a library like kafka-streams to do this.
+- General reflections or insights:
+  - Stream Processing is a great way to alter events in real time and gain insights in real time. It seems to be a great way to work with events. But I'm still not convinced that we need a library like kafka-streams to do this.
 
 TODO Jonas add your reflections
-
-TODO Kris add your and Marcel's reflections
 
 ## Editorial Notes
 
