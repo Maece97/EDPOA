@@ -14,6 +14,20 @@ kafka-topics \
   --replication-factor 1 \
   --partitions 1 \
   --create
+# create the transaction-filtered topic
+kafka-topics \
+  --bootstrap-server kafka:9092 \
+  --topic transaction-filtered \
+  --replication-factor 1 \
+  --partitions 1 \
+  --create
+# create the transaction-fraud-preprocessed topic
+kafka-topics \
+  --bootstrap-server kafka:9092 \
+  --topic transaction-fraud-preprocessed \
+  --replication-factor 1 \
+  --partitions 1 \
+  --create
 # Test topic
 kafka-topics \
   --bootstrap-server kafka:9092 \
@@ -22,3 +36,12 @@ kafka-topics \
   --partitions 1 \
   --create
 sleep infinity
+
+
+
+
+
+
+
+
+

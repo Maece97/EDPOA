@@ -50,10 +50,12 @@ public class TransactionFaker {
             double randNr = Math.random();
             //The app currently knows these currencies
             String[] currencies = {"EUR", "CHF", "JPY"};
+            String[] cardNumbers = {"123456789", "849203850", "302849553"};
             //t.setAmount(faker.commerce().price(0, 1000));
             t.setId(UUID.randomUUID().toString());
             t.setAmount(String.valueOf(faker.random().nextInt(1000)));
-            t.setCardNumber(faker.finance().creditCard());
+            // t.setCardNumber(faker.finance().creditCard());
+            t.setCardNumber(cardNumbers[faker.random().nextInt(cardNumbers.length)]);
             t.setCountry(faker.address().country());
             //t.setCurrency(faker.currency().code());
             //Randomly select one of those three currencies

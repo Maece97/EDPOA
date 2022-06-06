@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 import java.util.Random;
 import java.util.UUID;
 
+import ch.unisg.model.FilteredTransaction;
 import ch.unisg.model.KafkaProducer;
 import ch.unisg.model.dto.TransactionTransferObject;
 import lombok.Data;
@@ -38,16 +39,18 @@ public class Transaction {
         this.kafkaProducer = kafkaProducer;
     }
 
-    public Transaction(TransactionTransferObject tto, KafkaProducer kafkaProducer){
-        this.id = tto.getId();
-        this.timestamp = tto.getTimestamp();
-        this.merchant = tto.getMerchant();
-        this.amount = tto.getAmount();
-        this.currency = tto.getCurrency();
-        this.cardNumber = tto.getCardNumber();
-        this.pin = tto.getPin();
-        this.merchantCategory = tto.getMerchantCategory();
-        this.country = tto.getCountry();
+    public Transaction(FilteredTransaction tto, KafkaProducer kafkaProducer){
+        System.out.println("HELLO");
+        this.id = UUID.fromString((String)tto.getId());
+        //this.timestamp = Timestamp.valueOf((String)tto.getTimestamp());
+        this.timestamp = new Timestamp(System.currentTimeMillis());
+        this.merchant = (String)tto.getMerchant();
+        this.amount = Double.parseDouble((String)tto.getAmount());
+        this.currency = (String)tto.getCurrency();
+        this.cardNumber = (String)tto.getCardNumber();
+        this.pin = 0;
+        this.merchantCategory = (String)tto.getMerchantCategory();
+        this.country = (String)tto.getCountry();
         this.kafkaProducer = kafkaProducer;
     }
 

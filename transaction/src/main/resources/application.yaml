@@ -16,3 +16,11 @@ kafka:
   bootstrap-address: localhost:29092
   group-id: randomGroupId
   trusted-packages: ch.unisg.transaction.dto, ch.unisg.pin.dto
+
+spring:
+  kafka:
+    properties:
+      schema.registry.url: http://localhost:8081
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: io.confluent.kafka.serializers.KafkaAvroSerializer

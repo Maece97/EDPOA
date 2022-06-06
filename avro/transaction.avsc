@@ -4,6 +4,26 @@
   "type": "record",
   "fields": [
     {
+      "name": "id",
+      "type": "string"
+    },
+    {
+      "name": "timestamp",
+      "type": "string"
+    },
+    {
+      "name": "status",
+      "type": "string"
+    },
+    {
+      "name": "exchangeRate",
+      "type": "string"
+    },
+    {
+      "name": "checkResult",
+      "type": "string"
+    },
+    {
       "name": "cardNumber",
       "type": "string"
     },

@@ -19,8 +19,8 @@ spring:
           destination: queue.fraudulentTransaction
           binder: kafka1
         transaction-in-0:
-          destination: approved-transactions
-          binder: kafka1
+          destination: transaction-fraud-preprocessed
+          binder: kafkaAvro
         # transaction-out-0:
         #   destination: queue.transaction
         #   binder: kafka1
@@ -50,6 +50,24 @@ spring:
                         configuration:
                           value:
                             serializer: ch.unisg.model.dto.converters.MessageSerializer
+        kafkaAvro: # name of the binder can be any string
+          type: kafka # binder type (dependency needs to be added inside pom.xml)
+          # Configuration of the binder
+          environment:
+            spring:
+              cloud:
+                stream:
+                  kafka:
+                    binder:
+                      brokers: localhost
+                      defaultBrokerPort: 29092
+                    # set default configuration for all consumer and producer
+                    default:
+                      consumer:
+                        configuration:
+                          value:
+                            deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
+                          schema.registry.url: http://localhost:8081
       default:
         # consumer:
         #   use-native-decoding: true # This enables using the custom serializer

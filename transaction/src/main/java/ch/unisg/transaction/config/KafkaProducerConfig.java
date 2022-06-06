@@ -1,6 +1,9 @@
 package ch.unisg.transaction.config;
 
+import ch.unisg.model.Transaction;
 import ch.unisg.transaction.dto.*;
+import io.confluent.kafka.serializers.AbstractKafkaAvroSerDeConfig;
+
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Value;
@@ -113,24 +116,46 @@ public class KafkaProducerConfig {
         return new KafkaTemplate<>(limitFactory());
     }
 
+//     @Bean
+//     public ProducerFactory<String, TransactionDto> transactionFactory() {
+//         Map<String, Object> props = new HashMap<>();
+//         props.put(
+//                 ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,
+//                 bootstrapAddress);
+//         props.put(
+//                 ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG,
+//                 StringSerializer.class);
+//         props.put(
+//                 ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,
+//                 JsonSerializer.class);
+//         props.put(JsonDeserializer.TRUSTED_PACKAGES, trustedPackage);
+//         return new DefaultKafkaProducerFactory<>(props);
+//     }
+
+//     @Bean
+//     public KafkaTemplate<String, TransactionDto> transactionDtoKafkaTemplate() {
+//         return new KafkaTemplate<>(transactionFactory());
+//     }
+
     @Bean
-    public ProducerFactory<String, TransactionDto> transactionFactory() {
+    public ProducerFactory<String, Transaction> transactionFactory() {
         Map<String, Object> props = new HashMap<>();
         props.put(
                 ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,
                 bootstrapAddress);
         props.put(
                 ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG,
-                StringSerializer.class);
+                "org.apache.kafka.common.serialization.StringSerializer");
         props.put(
                 ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,
-                JsonSerializer.class);
-        props.put(JsonDeserializer.TRUSTED_PACKAGES, trustedPackage);
+                "io.confluent.kafka.serializers.KafkaAvroSerializer");
+        props.put(AbstractKafkaAvroSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG, "http://localhost:8081");
+        // props.put(JsonDeserializer.TRUSTED_PACKAGES, trustedPackage);
         return new DefaultKafkaProducerFactory<>(props);
     }
 
     @Bean
-    public KafkaTemplate<String, TransactionDto> transactionDtoKafkaTemplate() {
+    public KafkaTemplate<String, Transaction> transactionDtoKafkaTemplate() {
         return new KafkaTemplate<>(transactionFactory());
     }
 

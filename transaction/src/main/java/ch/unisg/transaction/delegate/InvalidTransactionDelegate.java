@@ -1,5 +1,6 @@
 package ch.unisg.transaction.delegate;
 
+import ch.unisg.model.Transaction;
 import ch.unisg.transaction.dto.TransactionDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,7 +15,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @Slf4j
 public class InvalidTransactionDelegate implements JavaDelegate {
-    private final KafkaTemplate<String, TransactionDto> kafkaTemplate;
+    private final KafkaTemplate<String, Transaction> kafkaTemplate;
 
     @Override
     public void execute(DelegateExecution delegateExecution) throws Exception {
@@ -32,7 +33,7 @@ public class InvalidTransactionDelegate implements JavaDelegate {
         //build DTO
         TransactionDto transactionDto = new TransactionDto(merchant,merchantCategory,country,amount,currency,cardNumber,pin,status,exchangeRate,"rejected");
         //Send DTO to approved transactions via Kafka
-        kafkaTemplate.send("approved-transactions", transactionDto);
+        // kafkaTemplate.send("approved-transactions", transactionDto);
 
 
 

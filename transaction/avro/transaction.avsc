@@ -1,0 +1,19 @@
+{
+  "namespace": "ch.unisg.model",
+  "name": "Transaction",
+  "type": "record",
+  "fields": [
+    {
+      "name": "cardNumber",
+      "type": "string"
+    },
+    {
+      "name": "amount",
+      "type": "string"
+    },
+    {
+      "name": "currency",
+      "type": "string"
+    }
+  ]
+}

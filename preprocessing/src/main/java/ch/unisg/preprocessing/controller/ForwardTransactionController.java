@@ -26,7 +26,7 @@ public class ForwardTransactionController {
                 "    \"cardNumber\": {\"value\":\""+cardNumber+"\", \"type\":\"String\"},\n" +
                 "    \"country\":{\"value\":\""+country+"\",\"type\":\"String\"},\n" +
                 "    \"merchant\":{\"value\":\""+merchant+"\",\"type\":\"String\"},\n" +
-                "    \"merchantCategory\":{\""+merchantCategory+"\":\"Bitcoin\",\"type\":\"String\"},\n" +
+                "    \"merchantCategory\":{\"value\":\""+merchantCategory+"\",\"type\":\"String\"},\n" +
                 "    \"currency\":{\"value\":\""+currency+"\",\"type\":\"String\"},\n" +
                 "    \"tries\":{\"value\":\""+tries+"\",\"type\":\"String\"},\n" +
                 "    \"status\":{\"value\":\""+status+"\",\"type\":\"String\"},\n" +

@@ -61,6 +61,16 @@
 		</dependency>
 
 	</dependencies>
+
+
+    <pluginRepositories>
+        <pluginRepository> 
+            <id>confluent</id> 
+            <name>Confluent</name> 
+            <url>https://packages.confluent.io/maven/</url> 
+        </pluginRepository> 
+    </pluginRepositories>
+
 	<build>
         <plugins>
             <plugin>
@@ -71,9 +81,10 @@
                     <schemaRegistryUrls>
                         <param>http://localhost:8081</param>
                     </schemaRegistryUrls>
-                    <outputDirectory>src/main/java/ch/unisg/model</outputDirectory>
+                    <outputDirectory>src/main/avro</outputDirectory>
                     <subjectPatterns>
-                        <param>transaction-postprocessing-(key|value)$</param>
+                        <param>Transaction</param>
+                        <param>FilteredTransaction</param>
                     </subjectPatterns>
                 </configuration>
             </plugin>
