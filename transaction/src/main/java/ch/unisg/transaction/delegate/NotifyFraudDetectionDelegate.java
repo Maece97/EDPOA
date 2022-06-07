@@ -65,22 +65,7 @@ public class NotifyFraudDetectionDelegate implements JavaDelegate {
         transaction.setTimestamp(new Timestamp(System.currentTimeMillis()).toString());
 
         //Send DTO to approved transactions via Kafka
-        System.out.println("HELLO: " + transaction.getAmount());
         kafkaTemplate.send("transaction-postprocessing", transaction);
-
-//       Properties props = new Properties();
-// props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapAddress);
-// props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG,
-//           org.apache.kafka.common.serialization.StringSerializer.class);
-// props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,
-//           io.confluent.kafka.serializers.KafkaAvroSerializer.class);
-// props.put("schema.registry.url", "http://localhost:8081");
-// KafkaProducer producer = new KafkaProducer(props);
-
-// ProducerRecord<Object, Object> record = new ProducerRecord<>("transaction-postprocessing", transaction);
-//   producer.send(record);
-
-
 
     }
 }

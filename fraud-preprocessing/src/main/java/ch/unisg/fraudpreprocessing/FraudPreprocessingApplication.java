@@ -6,16 +6,20 @@ import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.StreamsConfig;
 import org.apache.kafka.streams.Topology;
 import org.apache.kafka.streams.state.HostInfo;
+import org.apache.log4j.BasicConfigurator;
 
 import java.util.Properties;
 
 import ch.unisg.fraudpreprocessing.topology.FraudPreprocessingTopology;
 import ch.unisg.fraudpreprocessing.controller.InteractiveQueries;
+import ch.unisg.fraudpreprocessing.json.TransactionTimestampExtractor;
 
 public class FraudPreprocessingApplication {
 
     public static void main(String[] args) {
         var topology = FraudPreprocessingTopology.build();
+
+        // BasicConfigurator.configure();
 
         var host = "localhost";
         var port = 7069;
@@ -30,6 +34,8 @@ public class FraudPreprocessingApplication {
         props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
         props.put(StreamsConfig.APPLICATION_SERVER_CONFIG, endpoint);
         props.put(StreamsConfig.STATE_DIR_CONFIG, stateDir);
+
+        props.put(StreamsConfig.DEFAULT_TIMESTAMP_EXTRACTOR_CLASS_CONFIG, TransactionTimestampExtractor.class);
 
         //build the topology
         var streams = new KafkaStreams(topology, props);

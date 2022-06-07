@@ -23,7 +23,7 @@ public class TransactionPostprocessingApplication {
 
 	public static void main(String[] args) {
 
-        BasicConfigurator.configure();
+        // BasicConfigurator.configure();
 		
 		Properties config = new Properties();
         config.put(StreamsConfig.APPLICATION_ID_CONFIG, "transaction-postprocessing");
