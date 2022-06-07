@@ -9,7 +9,7 @@ The fraud detection workflow (green) does the actual fraud detection. This is do
 machine learning and happens "behind the scenes". Therefore it is not as time sensitive as it happends 'offline' and does not require a quick response to the user.
 Below you will find a basic system overview.
 
-![System Overview - Diagram](doc/diagrams/System Overview.png)
+![System Overview - Diagram](doc/diagrams/System%20Overview.png)
 
 ## Service Descriptions
 
