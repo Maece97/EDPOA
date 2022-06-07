@@ -196,7 +196,7 @@ This section will outline the learnings we have gained from designing and implem
 
 - Avro:
   - Avro gives us a good way to share ObjectClasses between services with one single place of truth.
-  - The first option is to share this TransferObjectClass is within the events which adds unnecessary size to the event, which is not acceptable for us as we will have a high volume of events.
+  - The first option is to share this TransferObjectClass is within the events which adds unnecessary overhead. This is not acceptable for us as we will have a high volume of events.
   - The other option is to store the TransferObjects in a Repository. This also means we need a repository to store this TransferObject and act as the single place of truth. Which means we add a service which other services depend on and can fail if the repository service is not reachable. This also adds complexity in deployments, as the Avro schemas need to be in sync on the repository and within the code, as we still wan't to use git for version management.
   - We think the overhead and complexity which Avro adds is just not worth it. Overall, we could achieve almost the same with a simple shared library which contains the DTO.
 - Global K-Tables:
