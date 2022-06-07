@@ -1,0 +1,94 @@
+{
+	"info": {
+		"_postman_id": "a7f31f2e-cd90-4b13-a879-238fa73e0366",
+		"name": "EDPO 2 Showcase",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "1.0 Registry Schema Subjects",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost:8081/subjects"
+			},
+			"response": []
+		},
+		{
+			"name": "1.1 Registry Schema Transaction",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost:8081/subjects/Transaction/versions/latest"
+			},
+			"response": []
+		},
+		{
+			"name": "1.2 Registry Schema Transaction Copy",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost:8081/subjects/FilteredTransaction/versions/latest"
+			},
+			"response": []
+		},
+		{
+			"name": "2.1 Fake Transaction",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "1"
+				},
+				"url": "localhost:8100/faker/transactions"
+			},
+			"response": []
+		},
+		{
+			"name": "2.2 Update Exchange Rate",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"rate\": 0.98,\n    \"currency\":\"EUR\"\n}"
+				},
+				"url": "localhost:8104/limit/update"
+			},
+			"response": []
+		},
+		{
+			"name": "2.3 Fake Transaction",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "1"
+				},
+				"url": "localhost:8100/faker/transactions"
+			},
+			"response": []
+		},
+		{
+			"name": "2.4 Fake Transaction 100",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "100"
+				},
+				"url": "localhost:8100/faker/transactions"
+			},
+			"response": []
+		}
+	]
+}
