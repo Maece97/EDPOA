@@ -1,13 +1,12 @@
 # EDPOA
 
 ## General Description
-@Kris: Not too sure if thats good pls read over it 
 
 Our system is a credit card transaction processing system that both processes transactions coming in and detects fraudulent transactions.
 It is composed from two major parts. The transaction workflow (blue) is responsible for rejecting or accepting the transaction
 based on "hard-coded" criteria. To be able to respond to the customer quickly, this process is time-sensitive.
 The fraud detection workflow (green) does the actual fraud detection. This is done with the help of
-machine learning and happens "behind the scenes". Therefore it is not time sensitive as it does not require a quick response to the user.
+machine learning and happens "behind the scenes". Therefore it is not as time sensitive as it happends 'offline' and does not require a quick response to the user.
 Below you will find a basic system overview.
 
 ![System Overview - Diagram](doc/diagrams/system_diagram.png)
@@ -36,13 +35,13 @@ It also checks if one of those rules is violated and returns the result.
 **Transaction Postprocessing Service:** Filters the fields which are not needed for the actual
 fraud detection system but for the rule based decisions.
 
-**Fraud Preprocessing Service:** TODO Kris
+**Fraud Preprocessing Service:** Aggregates the stream of transactions and sends out alerts to the Fraud Detection System when a large number if transactions occur in a short amount of time on the same card.
 
-**Fraud Detection Service:** TODO Kris
+**Fraud Detection Service:** Processes the stream of transactions from the Transaction Postprocessing Service and the alrts from the Fraud Preprocessing Service to detect potentially fraudulent transactions.
 
-**Fraud Investigation Service:**  TODO Kris
+**Fraud Investigation Service:**  This service would in practice support an UI where fraud detection specialists would review potential frauds flagged up by the Fraud Detection Service.
 
-**Fraud Dispute Service:** TODO Kris
+**Fraud Dispute Service:** This service would in practice be used to process customer disputes. These occur when the customer does not recognise a transaction on their card. 
 ## Running the system
 
 TODO Marcel update this 
@@ -170,7 +169,8 @@ This section describes how our system implements the concepts covered in the fir
 - **KStreams, KTables, Global KTables**: See [topology description](doc/topologies.md).
 - **Interactive queries**: See [topology description](doc/topologies.md).
 
-@Kris: the stuff below is lecture 10 no?
+@Kris: the stuff below is lecture 10 no? 
+@Jonas: Yeah I think so, but it is labelled as lecture 10? I don't get the issue :)
 ### Lecture 10
 
 - **Time semantics**: Our transaction event has a timestamp embedded within it. This serves as the event time. The event time is in fact extracted using a custom timestamp extractor in the fraud preprocessing topology. For more information see [topology description](doc/topologies.md).
@@ -184,18 +184,15 @@ See [topology description](doc/topologies.md)
 
 You can find our ADRs [here](doc/architecture/decisions/).
 
-
-TODO Kris ADR on new service granularities 
-
 ## Diagrams
 
 - [Architecture Characteristics Worksheet](doc/diagrams/Architecture%20Characteristics%20Worksheet.pdf)
 - [Bounded Contexts Diagram](doc/diagrams/Bounded%20Contexts%20-%20EDPO.pdf)
 - [System Overview](doc/diagrams/System%20Overview.png)
 - [Transaction Workflow BPMN](doc/diagrams/Transaction%20Workflow%20BPMN.png)
-
-TODO Kris Add all topologies etc to list - at very end
-
+- [Transaction Preprocessing Topology](doc/diagrams/topologies/transaction_preprocessing_topology_diagram.png)
+- [Transaction Postprocessing Topology](doc/diagrams/topologies/transaction_postprocessing_topology_diagram.png)
+- [Fraud Preprocessing Topology](doc/diagrams/topologies/fraud_preprocessing_topology_diagram.png)
 
 ## Results
 
@@ -226,7 +223,6 @@ This section will outline the learnings we have gained from designing and implem
 - Differentiating between commands and events was more difficult than expected
 
 ### Assignment 2
-@Kris: is partitioning somwhere in here? if yes just delete this comment :D
 - Avro:
   - Avro gives us a good way to share ObjectClasses between services with one single place of truth.
   - The first option is to share this TransferObjectClass is within the events which adds unnessesary size to the event, which is not acceptable for us as we will have a high volume of events.
@@ -250,6 +246,7 @@ In this section, we explain some things and decisions that might not be clear fr
 
 - The Card service only contains the card limit in our implementation. In practice, this service should also contain more information on the card and more business logic about how that information can change. For example, it should contain the status of the card (open, closed, etc.) and business logic on how these can change.
 - We send the transactions from the Transaction Preprocessing Service to the Transaction service via a HTTP request. This is done for compatibility reasons with our already existing system from assignment 1. We are aware that this introduces runtime coupling between those two services. In the first round of refactoring, we would replace this with Kafka communication. Thereby, we reach better responsiveness which is a crucial non functional property in the first part of our system.
+- We ended up going back from our original aggregations for the Fraud Preprocessing service because our research found that this was not efficiently supported by the high-level Kafka Streams DSL and it was not clear how to implement this efficiently with the Kafka Streams API. We also wanted to try out some of the winowed aggregation functionality from Kafka Streams so that's why we went with this slimmed down version.
 
 ## Responsibilities
 
