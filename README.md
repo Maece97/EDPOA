@@ -11,55 +11,24 @@ Below you will find a basic system overview.
 
 ![System Overview - Diagram](doc/diagrams/System%20Overview.png)
 
-## Service Descriptions
+## Service Overview
 
-**Transaction Preprocessing:**
-The main entry point for all transactions into our system.
-It enriches the transaction with the card status and standardizes amount to USD
-
-**Card Service:** Keeps track of each cards limit and status and encapsulates getting
-updates from the outside world and distribute them to the services working with this data.
-
-**Exchange Rates Services:** Is responsible for updating the
-exchange rates used in the Preprocessing service to standardize the amount.
-For doing so, it is periodically updated by querying an external API.
-
-**Transaction Service:** Represents the first instance of our transaction approval
-process. It does all sorts of rule based checks on the transaction (pin correct, limit exceeded,
-predefined blocking rule violated )
-
-**Pin Service:** Checks if the pin is correct and return the result.
-
-**Blocking rules service:** Keeps a set of predefined rules for blocking a transaction.
-It also checks if one of those rules is violated and returns the result.
-
-**Transaction Postprocessing Service:** Filters the fields which are not needed for the actual
-fraud detection system but for the rule based decisions.
-
-**Fraud Preprocessing Service:** Aggregates the stream of transactions and sends out alerts to the Fraud Detection System when a large number if transactions occur in a short amount of time on the same card.
-
-**Fraud Detection Service:** Processes the stream of transactions from the Transaction Postprocessing Service and the alrts from the Fraud Preprocessing Service to detect potentially fraudulent transactions.
-
-**Fraud Investigation Service:** This service would in practice support an UI where fraud detection specialists would review potential frauds flagged up by the Fraud Detection Service.
-
-**Fraud Dispute Service:** This service would in practice be used to process customer disputes. These occur when the customer does not recognise a transaction on their card.
+| Service Name                       | Package Name               | Port | Description                                                                                                                                                                                    |
+| ---------------------------------- | -------------------------- | ---- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Transaction Faker Service          | transaction-faker          | 8100 | Sends generated fake transactions into our system                                                                                                                                                                                               |
+| Transaction Preprocessing Service  | preprocessing              | none | The main entry point for all transactions into our system. It enriches the transaction with the card status and standardizes amount to USD                                                     |
+| Card Service                       | card                       | 8109 |  Keeps track of each cards limit and status and encapsulates getting updates from the outside world and distribute them to the services working with this data.                                |
+| Exchange Rates Service             | exchange-rates             | 8104 | Is responsible for updating the exchange rates used in the Preprocessing service to standardize the amount. For doing so, it is periodically updated by querying an external API.              |
+| Transaction Service                | transaction                | 8080 | Represents the first instance of our transaction approval process. It does all sorts of rule based checks on the transaction (pin correct, limit exceeded, predefined blocking rule violated ) |
+| Pin Service                        | pin                        | 8105 | Checks if the pin is correct and return the result.                                                                                                                                            |
+| Blocking Rules Service             | blocking-rules             | 8108 | Keeps a set of predefined rules for blocking a transaction. It also checks if one of those rules is violated and returns the result.                                                           |
+| Transaction Postprocessing Service | transaction-postprocessing | none | Filters the fields which are not needed for the actual fraud detection system but for the rule based decisions.                                                                                |
+| Fraud Preprocessing Service        | fraud-preprocessing        | none | Aggregates the stream of transactions and sends out alerts to the Fraud Detection System when a large number if transactions occur in a short amount of time on the same card.                 |
+| Fraud Detection Service            | model                      | 8101 |  Processes the stream of transactions from the Transaction Postprocessing Service and the alrts from the Fraud Preprocessing Service to detect potentially fraudulent transactions.            |
+| Fraud Investigation Service        | fraud-investigation        | 8102 | This service would in practice support an UI where fraud detection specialists would review potential frauds flagged up by the Fraud Detection Service.                                        |
+| Fraud Dispute Service              | transaction-dispute        | 8103 | This service would in practice be used to process customer disputes. These occur when the customer does not recognise a transaction on their card.                                             |
 
 ## Running the system
-
-### Services
-
-| Name                | Port |
-| ------------------- | ---- |
-| transaction         | 8080 |
-| transaction-faker   | 8100 |
-| model               | 8101 |
-| fraud-investigation | 8102 |
-| transaction-dispute | 8103 |
-| exchange-rates      | 8104 |
-| pin                 | 8105 |
-| blocking-rules      | 8108 |
-| card                | 8109 |
-
 ### How to run
 
 Example requests for Postman can be found [here](doc/postman/).
@@ -273,7 +242,7 @@ In this section, we explain some things and decisions that might not be clear fr
     - Integrated the microservices and tested the system flow
     - Wrote the code for the Transaction Postprocessing and the Transaction Faker services
   - Jonas:
-    - Wrote the code for the Transaction Preprocessing service
+    - Wrote the code for the Transaction Preprocessing service and the Exchange Rates Service
     - Integrated the Transaction Preprocessing service with the Transaction service (Camunda workflow)
   - Kristófer:
     - Wrote the code for the Fraud Preprocessing service
