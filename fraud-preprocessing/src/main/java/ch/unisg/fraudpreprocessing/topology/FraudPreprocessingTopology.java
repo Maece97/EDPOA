@@ -1,8 +1,5 @@
 package ch.unisg.fraudpreprocessing.topology;
 
-import ch.unisg.fraudpreprocessing.dto.TransactionAlert;
-import ch.unisg.fraudpreprocessing.json.TransactionAlertSerdes;
-import ch.unisg.fraudpreprocessing.json.TransactionSerdes;
 import ch.unisg.fraudpreprocessing.json.TransactionTimestampExtractor;
 import ch.unisg.fraudpreprocessing.serialization.avro.AvroSerdes;
 import ch.unisg.model.FilteredTransaction;
@@ -23,28 +20,29 @@ public class FraudPreprocessingTopology {
 
         KStream<String, FilteredTransaction> incomingTransactionStream =
             builder.stream("transaction-filtered", Consumed.with(Serdes.String(), 
-                AvroSerdes.FilteredTransaction("http://localhost:8081", false)));
-
-
-        // var incomingTransactionStream =
-        //         builder.stream("incoming-transactions", Consumed.with(Serdes.String(), new TransactionSerdes())
-        //                 .withTimestampExtractor(new TransactionTimestampExtractor()))
-        //                 .map((key, value) -> new KeyValue<>(
-        //                         value.getCardNumber(),
-        //                         value
-        //         )
-        //                 );
+                AvroSerdes.FilteredTransaction("http://localhost:8081", false)))
+                    .withTimestampExtractor(new TransactionTimestampExtractor()))
+                         .map((key, value) -> new KeyValue<>(
+                                 value.getCardNumber(),
+                                 value)
+                         );
 
         incomingTransactionStream.print(Printed.<String, FilteredTransaction>toSysOut().withLabel("transaction-filtered"));
 
         incomingTransactionStream.foreach((k,v)-> System.out.println("--> Incoming Transaction" + " " + k + " : " + v));
 
-        var tumblingWindow = TimeWindows.of(Duration.ofSeconds(5));
+        var tumblingWindow = TimeWindows.of(Duration.ofSeconds(60)).grace(Duration.ofSeconds(5));
 
         var transactionCounts = incomingTransactionStream
                 .groupByKey(Grouped.with(Serdes.String(), AvroSerdes.FilteredTransaction("http://localhost:8081", false)))
                 .windowedBy(tumblingWindow)
-                .count(Materialized.as("transaction-counts"));
+                .count(Materialized.as("transaction-counts"))
+                .suppress(Suppressed.untilWindowCloses(BufferConfig.unbounded().shutDownWhenFull()));
+
+        var filteredTransactionCounts = transactionCounts.filter(
+                (key, value) ->
+                        value != null && value >= 5
+        );
 
         incomingTransactionStream.to("transaction-fraud-preprocessed", Produced.with(Serdes.String(), AvroSerdes.FilteredTransaction("http://localhost:8081", false)));
         

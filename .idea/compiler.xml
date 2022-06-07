@@ -12,6 +12,7 @@
         <module name="exchange-rates" />
         <module name="transaction-faker" />
         <module name="blocking-rules" />
+        <module name="fraud-preprocessing" />
         <module name="transaction" />
         <module name="card" />
       </profile>
@@ -20,6 +21,7 @@
       <module name="blocking-rules" target="11" />
       <module name="card" target="11" />
       <module name="exchange-rates" target="11" />
+      <module name="fraud-preprocessing" target="15" />
       <module name="pin" target="11" />
       <module name="pin_backup" target="11" />
       <module name="preprocessing" target="11" />
