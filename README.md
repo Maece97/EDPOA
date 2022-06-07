@@ -3,10 +3,10 @@
 ## General Description
 
 Our system is a credit card transaction processing system that both processes transactions coming in and detects fraudulent transactions.
-It is composed from two major parts. The transaction workflow (blue) is responsible for rejecting or accepting the transaction
-based on "hard-coded" criteria. To be able to respond to the customer quickly, this process is time-sensitive.
+It is composed of two major parts. The transaction workflow (blue) is responsible for rejecting or accepting the transaction
+based on "hard-coded" criteria. To respond to the customer quickly, this process is time-sensitive.
 The fraud detection workflow (green) does the actual fraud detection. This is done with the help of
-machine learning and happens "behind the scenes". Therefore it is not as time sensitive as it happends 'offline' and does not require a quick response to the user.
+machine learning and happens "behind the scenes". Therefore it is not as time sensitive as it happens 'offline' and does not require a quick response from the user.
 Below you will find a basic system overview.
 
 ![System Overview - Diagram](doc/diagrams/System%20Overview.png)
@@ -15,7 +15,7 @@ Below you will find a basic system overview.
 
 | Service Name                       | Package Name               | Port | Description                                                                                                                                                                                    |
 | ---------------------------------- | -------------------------- | ---- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Transaction Faker Service          | transaction-faker          | 8100 | Sends generated fake transactions into our system                                                                                                                                                                                               |
+| Transaction Faker Service          | transaction-faker          | 8100 | Sends generated fake transactions into our system                                                                                                                                              |
 | Transaction Preprocessing Service  | preprocessing              | none | The main entry point for all transactions into our system. It enriches the transaction with the card status and standardizes amount to USD                                                     |
 | Card Service                       | card                       | 8109 |  Keeps track of each cards limit and status and encapsulates getting updates from the outside world and distribute them to the services working with this data.                                |
 | Exchange Rates Service             | exchange-rates             | 8104 | Is responsible for updating the exchange rates used in the Preprocessing service to standardize the amount. For doing so, it is periodically updated by querying an external API.              |
@@ -29,6 +29,7 @@ Below you will find a basic system overview.
 | Fraud Dispute Service              | transaction-dispute        | 8103 | This service would in practice be used to process customer disputes. These occur when the customer does not recognise a transaction on their card.                                             |
 
 ## Running the system
+
 ### How to run
 
 Example requests for Postman can be found [here](doc/postman/).
@@ -95,21 +96,20 @@ This section describes how our system implements the concepts covered in the cou
 ### Lecture 8
 
 - **Event Processing Design Patterns**
-  - **Single-Event Processing**: The Transaction Postprocessing service employs this pattern when it filters the content of the transactions before passing them on to the Fraud Detection workflow.
-  - **Processing with Local State**: The Fraud Preprocessing service follows this pattern to enable windowed aggregations of the transaction stream
-  - **Processing with External Lookup (Stream-Table Join)**: The Transaction Preprocessing Service follows this pattern by including
-    exchange rates from a third party API as well as the card status from our own card service. [ADR: Use Caching in Transaction Preprocessing](doc/architecture/decisions/0009-use-caching-in-preprocessing.md)
+- **Single-Event Processing**: The Transaction Postprocessing service employs this pattern when it filters the content of the transactions before passing them on to the Fraud Detection workflow.
+- **Processing with Local State**: The Fraud Preprocessing service follows this pattern to enable windowed aggregations of the transaction stream
+- **Processing with External Lookup (Stream-Table Join)**: The Transaction Preprocessing Service follows this pattern by including
+  exchange rates from a third-party API and the card status from our card service. [ADR: Use Caching in Transaction Preprocessing](doc/architecture/decisions/0009-use-caching-in-preprocessing.md)
 - **Schema Registry-aware Avro Serdes**: Our system uses Schema Registry-aware Avro Serdes in order to share the Transaction class which is used by multiple services within our system. The usage of Avro and its trade-offs are discussed further within the [topology description](doc/topologies.md). We thereby implement the Event (De-)Serializer pattern and the Data Contract pattern.
 - **Event Processor Types**
-  - **Event Router**: This processor is implemented in the Transaction Preprocessing service where we select the transactions from our cards.
-  - **Content Filter**: Is implemented in the Transaction Postprocessing where we filter unneccessary fields.
-  - **Event Translator**: Is used in the Transaction Preprocessing where we standardize the amount to USD.
+- **Event Router**: This processor is implemented in the Transaction Preprocessing service, where we select the transactions from our cards.
+- **Content Filter**: Is implemented in the Transaction Postprocessing, where we filter unnecessary fields.
+- **Event Translator**: Is used in the Transaction Preprocessing, where we standardize the amount to USD.
 
 ### Lecture 9
 
 - **KStreams, KTables, Global KTables**: See [topology description](doc/topologies.md).
 - **Interactive queries**: See [topology description](doc/topologies.md).
-
 
 ### Lecture 10
 
@@ -164,26 +164,26 @@ This section will outline the learnings we have gained from designing and implem
 ### Assignment 2
 
 - Avro:
-  - Avro gives us a good way to share ObjectClasses between services with one single place of truth.
-  - The first option is to share this TransferObjectClass is within the events which adds unnecessary overhead. This is not acceptable for us as we will have a high volume of events.
-  - The other option is to store the TransferObjects in a Repository. This also means we need a repository to store this TransferObject and act as the single place of truth. Which means we add a service which other services depend on and can fail if the repository service is not reachable. This also adds complexity in deployments, as the Avro schemas need to be in sync on the repository and within the code, as we still wan't to use git for version management.
-  - We think the overhead and complexity which Avro adds is just not worth it. Overall, we could achieve almost the same with a simple shared library which contains the DTO.
+- Avro gives us an excellent way to share ObjectClasses between services with one single place of truth.
+- The first option is to share this TransferObjectClass within the events, which adds unnecessary overhead. This is not acceptable for us as we will have a high volume of events.
+- The other option is to store the TransferObjects in a Repository. This also means we need a repository to store this TransferObject and act as the single place of truth. This means we add a service that other services depend on and can fail if the repository service is not reachable. This also adds complexity in deployments, as the Avro schemas need to be in sync on the repository and within the code, as we still want to use git for version management.
+- We think the overhead and complexity that Avro adds is not worth it. Overall, we could achieve almost the same with a simple shared library that contains the DTO.
 - Global K-Tables:
-  - We planned to implement the exchange rates cache with a Global K-Table and are still convinced that this is the right choice. However, it does not provide the necessary interface to seamlessly perform joins without further ado. Therefore, it has been replaced by a "normal" K-Table in our implementation.
+- We planned to implement the exchange rates cache with a Global K-Table and are still convinced that this is the right choice. However, it does not provide the necessary interface to perform joins without further ado seamlessly. Therefore, it has been replaced by a "normal" K-Table in our implementation.
 - Kafka Streams:
-  - Kafka streams enable fast possibilities to process events. But this abstraction layer also comes at a cost, as we lose some control over the underlying functionality.
-  - In our experience it made it hard to debug. It took a while until we discovered how to enable logging, and in the standard logging configuration the logs would spam every single small detail. Which was not helpful at all.
-  - Versions of kafka stream older than 3.2.0 don't include arm binaries and therefore, don't support MacBooks with the M1 chip (Except when running the jar in Roseta [Hello IntelliJ Users :D]). M1 MacBooks are around for more than 1.5 years, and in my experience all other library's I normally work with updated their binaries within weeks or a few months. Kafka Streams 3.2.0 was recently release in May 2022, which makes us wonder about their generally update frequency and if this is acceptable for a library which is used at the core of the application. Switching to a different library or dropping it completely would mean rewriting almost every aspect of the event-processing services.
-  - For people who are not used to a more functional programming approach it is a bit of a mindset change first, but this was not too much of a challenge for us, as we are all experienced developers.
+- Kafka streams enable fast possibilities to process events. But this abstraction layer also comes at a cost, as we lose some control over the underlying functionality.
+- In our experience, it made it hard to debug. It took a while until we discovered how to enable logging, and in the standard logging configuration, the logs would spam every tiny detail, which was not helpful.
+- Versions of Kafka stream older than 3.2.0 don't include arm binaries and, therefore, don't support MacBooks with the M1 chip (Except when running the jar in Roseta [Hello IntelliJ Users :D]). M1 MacBooks have been around for more than 1.5 years, and in my experience, all other libraries I usually work with updated their binaries within weeks or a few months. Kafka Streams 3.2.0 was recently released in May 2022, which makes us wonder about their general update frequency and if this is acceptable for a library that is used at the core of the application. Switching to a different library or dropping it completely would mean rewriting almost every aspect of the event-processing services.
+- For people who are not used to a more functional programming approach, it is a bit of a mindset change at first, but this was not too much of a challenge for us, as we are all experienced developers.
 - General reflections and insights:
-  - Stream Processing is a great way to alter events and gain insights in real time. It seems to be a great way to work with events. But I'm still not convinced that we need a library like Kafka-Streams to do this. Using Kafka-Streams adds a framework which is kind of irreplaceable without rewriting most parts of the service. What we are doing in stream processing is mostly just simple Object manipulations and storing some data in a map-like structure when using K-Tables. I know, something super simple like Object manipulation can add a lot of boilerplate in strict languages like Java. Hence, the question arises if Java is the right language for this task. Other programming languages like JavaScript excel in Object manipulation and have a lot of build in support for that. Therefore, I'm sure in a language like this we could archive the same result with probably even less lines of code - without adding a huge library and abstraction on top.
+- Stream Processing is a great way to alter events and gain insights in real time. It seems to be a great way to work with events. But I'm still not convinced that we need a library like Kafka-Streams to do this. Using Kafka-Streams adds a framework that is kind of irreplaceable without rewriting most parts of the service. What we are doing in stream processing is mostly just simple Object manipulations and storing some data in a map-like structure when using K-Tables. Something super simple like Object manipulation can add a lot of boilerplate in strict languages like Java. Hence, the question arises, if Java is the right language for this task. Other programming languages like JavaScript excel in Object manipulation and have a lot of built-in support for that. Therefore, I'm sure in a language like this, we could archive the same result with probably even fewer lines of code - without adding a huge library and abstraction on top.
 
 ## Editorial Notes
 
-In this section, we explain some things and decisions that might not be clear from the other sections or documents.
+In this section, we explain some things and decisions that might not be clear from the other passages or documents.
 
-- We send the transactions from the Transaction Preprocessing Service to the Transaction service via a HTTP request. This is done for compatibility reasons with our already existing system from assignment 1. We are aware that this introduces runtime coupling between those two services. In the first round of refactoring, we would replace this with Kafka communication. Thereby, we reach better responsiveness which is a crucial non functional property in the first part of our system.
-- We ended up going back from our original aggregations for the Fraud Preprocessing service because our research found that this was not efficiently supported by the high-level Kafka Streams DSL and it was not clear how to implement this efficiently with the Kafka Streams API. We also wanted to try out some of the windowed aggregation functionality from Kafka Streams so that's why we went with this slimmed down version.
+- We send the transactions from the Transaction Preprocessing Service to the Transaction service via an HTTP request. This is done for compatibility reasons with our already existing system from assignment 1. We are aware that this introduces runtime coupling between those two services. In the first round of refactoring, we would replace this with Kafka communication. Thereby, we reach better responsiveness which is a crucial non-functional property in the first part of our system.
+- We ended up going back from our original aggregations for the Fraud Preprocessing service because our research found that this was not efficiently supported by the high-level Kafka Streams DSL, and it was not clear how to implement this efficiently with the Kafka Streams API. We also wanted to try out some of the windowed aggregation functionality from Kafka Streams, so we went with this slimmed-down version.
 
 ## Responsibilities
 
