@@ -9,7 +9,7 @@ The fraud detection workflow (green) does the actual fraud detection. This is do
 machine learning and happens "behind the scenes". Therefore it is not as time sensitive as it happends 'offline' and does not require a quick response to the user.
 Below you will find a basic system overview.
 
-![System Overview - Diagram](doc/diagrams/system_diagram.png)
+![System Overview - Diagram](doc/diagrams/System Overview.png)
 
 ## Service Descriptions
 
@@ -80,7 +80,7 @@ Example requests for Postman can be found [here](doc/postman/).
 
 ## Concepts Covered
 
-This section describes how our system implements the concepts covered in the first six lectures of the course. For a discussion of the architectural decisions surrounding the adoption of these concepts and their trade-offs, please refer to our architectural decision records (ADRs). Note that some relevant ADRs are linked where they directly address the concepts discussed here. However, some ADRs are not linked below, but all can be found [here](doc/architecture/decisions/).
+This section describes how our system implements the concepts covered in the course. For a discussion of the architectural decisions surrounding the adoption of these concepts and their trade-offs, please refer to our architectural decision records (ADRs). Note that some relevant ADRs are linked where they directly address the concepts discussed here. However, some ADRs are not linked below, but all can be found [here](doc/architecture/decisions/).
 
 ### Assignment 1
 
@@ -141,8 +141,6 @@ This section describes how our system implements the concepts covered in the fir
 - **KStreams, KTables, Global KTables**: See [topology description](doc/topologies.md).
 - **Interactive queries**: See [topology description](doc/topologies.md).
 
-@Kris: the stuff below is lecture 10 no?
-@Jonas: Yeah I think so, but it is labelled as lecture 10? I don't get the issue :)
 
 ### Lecture 10
 
@@ -207,15 +205,14 @@ This section will outline the learnings we have gained from designing and implem
   - Kafka streams enable fast possibilities to process events. But this abstraction layer also comes at a cost, as we lose some control over the underlying functionality.
   - In our experience it made it hard to debug. It took a while until we discovered how to enable logging, and in the standard logging configuration the logs would spam every single small detail. Which was not helpful at all.
   - Versions of kafka stream older than 3.2.0 don't include arm binaries and therefore, don't support MacBooks with the M1 chip (Except when running the jar in Roseta [Hello IntelliJ Users :D]). M1 MacBooks are around for more than 1.5 years, and in my experience all other library's I normally work with updated their binaries within weeks or a few months. Kafka Streams 3.2.0 was recently release in May 2022, which makes us wonder about their generally update frequency and if this is acceptable for a library which is used at the core of the application. Switching to a different library or dropping it completely would mean rewriting almost every aspect of the event-processing services.
-  - For people who are not used to a more functional programming approach it is a bit of a mindset change first, but this was not a to big of a challenge for us, as we are all experienced developer.
-- General reflections or insights:
-  - Stream Processing is a great way to alter events in real time and gain insights in real time. It seems to be a great way to work with events. But I'm still not convinced that we need a library like kafka-streams to do this. Using Kafka-streams adds a framework which is kinda irreplaceable without rewriting most part of the service. But overall, what we doing in stream processing is mostly just simple Object manipulations and storing some data in a Map like structure when using k-tables. I know, something super simple like Object manipulation can add a lot of boilerplate in strict languages like Java. Hence, the question arises if Java is the right language for this task. Other programming languages like JavaScript excel in Object manipulation and have a lot of build in support for that. Therefore, I'm sure in a language like this we could archive the same result with probably even less lines than with kafka-streams, without adding a huge library and abstraction on top.
+  - For people who are not used to a more functional programming approach it is a bit of a mindset change first, but this was not too much of a challenge for us, as we are all experienced developers.
+- General reflections and insights:
+  - Stream Processing is a great way to alter events and gain insights in real time. It seems to be a great way to work with events. But I'm still not convinced that we need a library like Kafka-Streams to do this. Using Kafka-Streams adds a framework which is kind of irreplaceable without rewriting most parts of the service. What we are doing in stream processing is mostly just simple Object manipulations and storing some data in a map-like structure when using K-Tables. I know, something super simple like Object manipulation can add a lot of boilerplate in strict languages like Java. Hence, the question arises if Java is the right language for this task. Other programming languages like JavaScript excel in Object manipulation and have a lot of build in support for that. Therefore, I'm sure in a language like this we could archive the same result with probably even less lines of code - without adding a huge library and abstraction on top.
 
 ## Editorial Notes
 
 In this section, we explain some things and decisions that might not be clear from the other sections or documents.
 
-- The Card service only contains the card limit in our implementation. In practice, this service should also contain more information on the card and more business logic about how that information can change. For example, it should contain the status of the card (open, closed, etc.) and business logic on how these can change.
 - We send the transactions from the Transaction Preprocessing Service to the Transaction service via a HTTP request. This is done for compatibility reasons with our already existing system from assignment 1. We are aware that this introduces runtime coupling between those two services. In the first round of refactoring, we would replace this with Kafka communication. Thereby, we reach better responsiveness which is a crucial non functional property in the first part of our system.
 - We ended up going back from our original aggregations for the Fraud Preprocessing service because our research found that this was not efficiently supported by the high-level Kafka Streams DSL and it was not clear how to implement this efficiently with the Kafka Streams API. We also wanted to try out some of the windowed aggregation functionality from Kafka Streams so that's why we went with this slimmed down version.
 
